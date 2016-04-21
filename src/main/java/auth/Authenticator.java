@@ -2,6 +2,7 @@ package auth;
 
 import database.DataBaseHelp;
 import model.Team;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.pac4j.core.exception.CredentialsException;
 import org.pac4j.core.util.CommonHelper;
 import org.pac4j.http.credentials.UsernamePasswordCredentials;
@@ -25,7 +26,7 @@ public class Authenticator implements UsernamePasswordAuthenticator {
         }
 
         String username = credentials.getUsername();
-        String password = credentials.getPassword();
+        String password = DigestUtils.md5Hex(credentials.getPassword());
         List<Team> list = DB.sql2o.open().createQuery("SELECT * FROM team WHERE name = :username").addParameter("username",username).executeAndFetch(Team.class);
         String checkerPass = list.get(0).getPass();
         if (CommonHelper.isBlank(username)) {

@@ -22,10 +22,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="CTFproj" />
         <module name="CTRproj" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="CTFproj" target="1.8" />
       <module name="CTRproj" target="1.8" />
     </bytecodeTargetLevel>
   </component>
