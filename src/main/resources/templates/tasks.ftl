@@ -16,7 +16,7 @@
                             <div class="input-group">
                                 <input type="text" class="form-control" name="${solve.getId()}" value="" >
                                 <div class="input-group-btn">
-                                    <button type="button" class="btn btn-default" type="submit" name="submit">Submit</button>
+                                    <button type="submit" class="btn btn-default" name="submit">Submit</button>
                                 </div><!-- /btn-group -->
                             </div><!-- /input-group -->
                            </div></div>
