@@ -1,3 +1,4 @@
+<#include "header.ftl">
 Team id : ${id}
 Team name : ${name}
 Team score : ${score}
@@ -6,3 +7,4 @@ Team place : ${place}
         <input id="btn_login" name="btn_login" type="submit" class="btn btn-default" value="Logout"/>
     </form>
 </p>
+<#include "footer.ftl">

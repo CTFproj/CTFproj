@@ -1,3 +1,4 @@
+<#include "header.ftl">
 <#if task??>
     <#list task as task1>
         <h1>${task1.getName()}</h1>
@@ -20,3 +21,4 @@
         </#if>
     </#list>
 </#if>
+<#include "footer.ftl">

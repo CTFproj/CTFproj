@@ -23,7 +23,10 @@ import spark.Response;
 import spark.Route;
 import spark.template.freemarker.FreeMarkerEngine;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 import static spark.Spark.*;
 
@@ -59,18 +62,24 @@ public class Main {
         before("/logout", new RequiresAuthenticationFilter(config, "FormClient"));
         before("/pass", new RequiresAuthenticationFilter(config, "FormClient"));
 
+        get("/logout", new AppLogout(config));
         post("/logout", new AppLogout(config));
 
+
         get("/rating", (req, res) -> {
-            HashMap<String, Object> model = new HashMap<>();
+            HashMap<String, Object> map = new HashMap<>();
             List<Team> list = db.sql2o.open().createQuery(db.SELECT_TEAM_DESC_SQL).executeAndFetch(Team.class);
-            model.put("list", list);
-            return new ModelAndView(model, "templates/rating.ftl");
+            map.put("list", list);
+            ModelAndView header = getHeader(map,req,res,db);
+            return new ModelAndView(map, "templates/rating.ftl");
         }, freeMarkerEngine);
 
         get("/", (req, res) -> {
-            HashMap<String, Object> model = new HashMap<>();
-            return new ModelAndView(model, "templates/index.ftl");
+            HashMap<String, Object> map = new HashMap<>();
+
+            ModelAndView header = getHeader(map,req,res,db);
+
+            return new ModelAndView(map, "templates/index.ftl");
         }, freeMarkerEngine);
 
         //Check flag
@@ -108,9 +117,11 @@ public class Main {
                 List<Task> task = db.sql2o.open().createQuery(db.SELECT_TASK_SQL).executeAndFetch(Task.class);
                 List<Task> not_solve_task = db.sql2o.open().createQuery(db.SELECT_NOT_SOLVE_SQL).addParameter("id", id).executeAndFetch(Task.class);
 
+
                 map.put("task", task);
                 map.put("not_solve_task", not_solve_task);
         }
+                ModelAndView header = getHeader(map,req,res,db);
                 return new ModelAndView(map, "templates/tasks.ftl");
         },freeMarkerEngine );
 
@@ -121,26 +132,19 @@ public class Main {
             UserProfile user = getUserProfile(req,res);
             try {
                 int id = Integer.parseInt(user.getId());
-                int place = 0;
                 HashMap<String, Object> map = new HashMap<>();
 
                 List<Team> list = db.sql2o.open().createQuery(db.SELECT_TEAM_SQL).addParameter("id",id).executeAndFetch(Team.class);
-                List<Team> rate = db.sql2o.open().createQuery(db.SELECT_TEAM_DESC_SQL).executeAndFetch(Team.class);
-
-                int score = list.get(0).getScore();
-                for(int i = 0; i < rate.size(); i++) {
-                    if(rate.get(i).getId() == id) {
-                        place = i + 1;
-                        break;
-                    }
-                }
+                int place = getPlace(db,list,id);
 
                 map.put("id", id);
                 map.put("name", user.getAttribute("username"));
                 map.put("place", place);
-                map.put("score", score);
+                map.put("score", list.get(0).getScore());
 
-                return new ModelAndView(map,"/templates/client.ftl");
+                ModelAndView header = getHeader(map,req,res,db);
+                return new ModelAndView(map,"/templates/" +
+                        "client.ftl");
             } catch (NullPointerException e) {
                 return null;
             }
@@ -162,5 +166,33 @@ public class Main {
         final SparkWebContext context = new SparkWebContext(request, response);
         final ProfileManager manager = new ProfileManager(context);
         return manager.get(true);
+    }
+    //header
+    private static ModelAndView getHeader (HashMap<String,Object> map, Request req, Response res, DataBaseHelp db) {
+        try {
+            int id = Integer.parseInt(getUserProfile(req,res).getId());
+            map.put("session",id);
+            List<Team> list = db.sql2o.open().createQuery(db.SELECT_TEAM_SQL).addParameter("id",id).executeAndFetch(Team.class);
+            Team team = list.get(0);
+            int place = getPlace(db,list,id);
+            map.put("name",team.getName());
+            map.put("score",team.getScore());
+            map.put("place", place);
+        }
+        catch (NullPointerException e) {}
+        ModelAndView header = new ModelAndView(map, "templates/header.ftl");
+        return header;
+    }
+    //palace
+    private static int getPlace(DataBaseHelp db, List<Team> list, int id) {
+        List<Team> rate = db.sql2o.open().createQuery(db.SELECT_TEAM_DESC_SQL).executeAndFetch(Team.class);
+        int place = 0;
+        for(int i = 0; i < rate.size(); i++) {
+            if(rate.get(i).getId() == id) {
+                place = i + 1;
+                break;
+            }
+        }
+        return place;
     }
 }
