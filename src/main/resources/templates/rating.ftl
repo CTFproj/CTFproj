@@ -1,7 +1,21 @@
 <#include "header.ftl">
-    <ul>
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">Rating</div>
+        <table class="table">
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Score</th>
+            </tr>
         <#list list as team>
-            <li>${team_index+1} ${team.name} with score = ${team.score}</li>
+            <tr>
+                <td>${team_index+1}</td>
+                <td>${team.name}</td>
+                <td>${team.score}</td>
+            </tr>
         </#list>
-    </ul>
+        </table>
+    </div>
+</div>
 <#include "footer.ftl">

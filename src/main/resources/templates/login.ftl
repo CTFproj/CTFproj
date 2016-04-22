@@ -1,11 +1,17 @@
-<title>${title}</title>
-<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
-<form action="${callbackUrl}" method="POST">
-    <h1>Login</h1>
-    <input type="text" name="username" value="" />
-    <p />
-    <h1>Password</h1>
-    <input type="password" name="password" value="" />
-    <p />
-    <input type="submit" name="submit" value="Submit" />
-</form>
+<#include "header.ftl">
+<div class="container">
+    <form class="form-signin" action="${callbackUrl}" method="POST">
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Enter a valid login
+        </div>
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <label for="inputLogin" class="sr-only">Login</label>
+        <input type="text" id="inputLogin" name="username" class="form-control" placeholder="Login" required="" autofocus="">
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required="">
+        <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Sign in</button>
+    </form>
+</div>
+<#include "footer.ftl">
