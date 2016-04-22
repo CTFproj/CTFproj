@@ -21,10 +21,7 @@ public class AuthConfigFactory implements ConfigFactory {
     public Config build() {
         // HTTP
         final FormClient formClient = new FormClient("http://localhost:8080/login", new Authenticator());
-        System.out.println(formClient.getPasswordParameter());
-        System.out.println(formClient.getAuthenticator());
         final IndirectBasicAuthClient indirectBasicAuthClient = new IndirectBasicAuthClient(new SimpleTestUsernamePasswordAuthenticator());
-
         final Clients clients = new Clients("http://localhost:8080/callback", formClient, indirectBasicAuthClient);
 
         final Config config = new Config(clients);
