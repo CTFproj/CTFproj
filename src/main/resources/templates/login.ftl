@@ -1,3 +1,4 @@
+<title>${title}</title>
 <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
 <form action="${callbackUrl}" method="POST">
     <h1>Login</h1>

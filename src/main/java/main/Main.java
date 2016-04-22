@@ -125,7 +125,7 @@ public class Main {
                 return new ModelAndView(map, "templates/tasks.ftl");
         },freeMarkerEngine );
 
-        get("/login", (req,res) -> form(config.getClients()), freeMarkerEngine);
+        get("/login", (req,res) -> form(config.getClients(), req), freeMarkerEngine);
 
         //get profile info
         get("/client", (req, res) -> {
@@ -155,9 +155,10 @@ public class Main {
     //help methods
 
     //login
-    private static ModelAndView form(final Clients clients) {
+    private static ModelAndView form(final Clients clients, Request req) {
         final HashMap<String,Object> map = new HashMap<>();
         final FormClient formClient = clients.findClient(FormClient.class);
+        map.put("title", "Login");
         map.put("callbackUrl", formClient.getCallbackUrl());
         return new ModelAndView(map, "templates/login.ftl");
     }
@@ -180,6 +181,14 @@ public class Main {
             map.put("place", place);
         }
         catch (NullPointerException e) {}
+        String path = req.pathInfo().substring(1);
+        if(path.equals("")) {
+            path = "Main";
+        } else {
+            path = path.substring(0,1).toUpperCase() + path.substring(1);
+
+        }
+        map.put("title", path);
         ModelAndView header = new ModelAndView(map, "templates/header.ftl");
         return header;
     }
