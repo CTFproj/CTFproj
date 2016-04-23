@@ -11,7 +11,7 @@
         <#list list as team>
             <tr>
                 <td>${team_index+1}</td>
-                <td>${team.name}</td>
+                <td><a href="/team/${team.name}">${team.name}</a></td>
                 <td>${team.score}</td>
             </tr>
         </#list>

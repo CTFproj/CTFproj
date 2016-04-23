@@ -32,7 +32,7 @@ import java.util.Set;
 import static spark.Spark.*;
 
 public class Main {
-    private String error;
+
     private final static Logger logger = LoggerFactory.getLogger(Main.class);
 
     //settings
@@ -103,7 +103,7 @@ public class Main {
                     db.sql2o.open().createQuery(db.INSERT_SQL).addParameter("team_id", team_id).addParameter("task_id", task_id).executeUpdate();
                     db.sql2o.open().createQuery(db.UPDATE_TEAM_SQL).addParameter("val", score).addParameter("id", team_id).executeUpdate();
                 } catch (Exception e) {
-                    System.out.println(e);
+                    System.out.println(e.toString());
                 }
             } else if (!val.isEmpty()) {
                 helpMap.put("id", task_id);
@@ -133,32 +133,61 @@ public class Main {
             return new ModelAndView(map, "templates/tasks.ftl");
         }, freeMarkerEngine);
 
-        get("/login", (req, res) -> form(config.getClients(), req, res, loginInfo ), freeMarkerEngine);
+        get("/login", (req, res) -> form(config.getClients(), req, res, loginInfo), freeMarkerEngine);
 
         //get profile info
+
         get("/client", (req, res) -> {
-            UserProfile user = getUserProfile(req, res);
+            HashMap<String, Object> map = new HashMap<>();
             try {
+                UserProfile user = getUserProfile(req, res);
                 int id = Integer.parseInt(user.getId());
-                HashMap<String, Object> map = new HashMap<>();
-
                 List<Team> list = db.sql2o.open().createQuery(db.SELECT_TEAM_SQL).addParameter("id", id).executeAndFetch(Team.class);
+                List<Task> task = db.sql2o.open().createQuery("SELECT id,name,des,flag,score,category FROM task JOIN solve_task ON task.id = solve_task.task_id WHERE team_id = :id").addParameter("id",id).executeAndFetch(Task.class);
                 int place = getPlace(db, list, id);
-
-                map.put("id", id);
-                map.put("name", user.getAttribute("username"));
-                map.put("place", place);
-                map.put("score", list.get(0).getScore());
-
+                if(list.size() > 0) {
+                    map.put("name", list.get(0).getName());
+                    map.put("place", place);
+                    map.put("score", list.get(0).getScore());
+                    map.put("id", id);
+                }
+                if(task.size() > 0) {
+                    map.put("task", task);
+                }
                 ModelAndView header = getHeader(map, req, res, db);
-                return new ModelAndView(map, "/templates/" +
-                        "client.ftl");
-            } catch (NullPointerException e) {
-                return null;
+                return new ModelAndView(map, "/templates/client.ftl");
+            } catch (Exception e) {
+                ModelAndView header = getHeader(map, req, res, db);
+                return new ModelAndView(map,"/templates/client.ftl");
             }
         }, freeMarkerEngine);
 
+        get("/team/:teamname", (req,res) -> {
+            HashMap<String, Object> map = new HashMap<>();
+            String teamname = req.params("teamname");
+            List<Team> list = db.sql2o.open().createQuery("SELECT * FROM team WHERE name = :name").addParameter("name", teamname).executeAndFetch(Team.class);
+            if(list.size() > 0) {
+                int id = list.get(0).getId();
+                List<Task> task = db.sql2o.open().createQuery("SELECT id,name,des,flag,score,category FROM task JOIN solve_task ON task.id = solve_task.task_id WHERE team_id = :id").addParameter("id",id).executeAndFetch(Task.class);
+                int place = getPlace(db, list, id);
+                map.put("teamname", teamname);
+                map.put("teamplace", place);
+                map.put("teamscore", list.get(0).getScore());
+                map.put("teamid", id);
+                if(task.size() > 0) {
+                    map.put("task", task);
+                }
+            }
+
+            ModelAndView header = getHeader(map, req, res, db);
+            return new ModelAndView(map, "/templates/team.ftl");
+        }, freeMarkerEngine);
+
+
     }
+
+
+
 
     //help methods
 
@@ -214,8 +243,18 @@ public class Main {
         }
         return place;
     }
-
-    public void setError(String error) {
-        this.error = error;
+    //solve tasks
+    private static List<Task> getSolvdeTask(DataBaseHelp db) {
+        List<Task> tasks = db.sql2o.open().createQuery(db.SELECT_TASK_SQL).executeAndFetch(Task.class);
+        List<Task> not_solved_tasks = db.sql2o.open().createQuery(db.SELECT_TASK_SQL).executeAndFetch(Task.class);
+        ArrayList<Task> solved = new ArrayList<>();
+        for(Task x : tasks) {
+            for(Task y : not_solved_tasks) {
+                if(x.equals(y)) {
+                    solved.add(x);
+                }
+            }
+        }
+        return solved;
     }
 }

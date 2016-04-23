@@ -1,12 +1,12 @@
 <#include "header.ftl">
 <div class="container">
-    <div class="panel panel-primary">
-        <div class="panel-heading">Profile</div>
+<div class="panel panel-primary">
+    <div class="panel-heading">Profile</div>
         <div class="panel-body">
-            <#if id??><p>Team id: <br>
-            Team name: ${name!}<br>
-            Team score: ${score}<br>
-            Team place: ${place}</p>
+        <#if teamid??><p>Team id: ${teamid} <br>
+            Team name: ${teamname}<br>
+            Team score: ${teamscore}<br>
+            Team place: ${teamplace}</p>
             <#if task??>
                 <h2>Solved tasks</h2>
                 <table class="table table-striped">
@@ -24,11 +24,6 @@
                     </#list>
                 </table>
             </#if>
-        </div>
-        <div class="panel-footer">
-            <form action="logout" method="POST">
-                <input id="btn_login" name="btn_login" type="submit" class="btn btn-danger" value="Logout"/>
-            </form>
         </div>
     </div>
 </div>
