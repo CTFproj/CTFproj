@@ -4,7 +4,6 @@ import org.sql2o.Sql2o;
 
 public class DataBaseHelp{
     public Sql2o sql2o = new Sql2o("jdbc:postgresql://localhost:5432/CTF","postgres","Pass1234");
-
     //SQL-request
     public String UPDATE_TEAM_SQL = "UPDATE team SET score = score + :val WHERE id = :id";
     public String SELECT_TEAM_SQL = "SELECT * FROM team WHERE id = :id";

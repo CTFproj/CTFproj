@@ -2,6 +2,7 @@ package main;
 
 import auth.AppLogout;
 import auth.AuthConfigFactory;
+import auth.LoginInfo;
 import database.DataBaseHelp;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
@@ -31,7 +32,7 @@ import java.util.Set;
 import static spark.Spark.*;
 
 public class Main {
-
+    private String error;
     private final static Logger logger = LoggerFactory.getLogger(Main.class);
 
     //settings
@@ -50,6 +51,7 @@ public class Main {
         final Config config = new AuthConfigFactory(freeMarkerEngine).build();
         final Route callback = new CallbackRoute(config);
 
+        LoginInfo loginInfo = new LoginInfo();
         DataBaseHelp db = new DataBaseHelp();
 
         get("/callback", callback);
@@ -70,26 +72,26 @@ public class Main {
             HashMap<String, Object> map = new HashMap<>();
             List<Team> list = db.sql2o.open().createQuery(db.SELECT_TEAM_DESC_SQL).executeAndFetch(Team.class);
             map.put("list", list);
-            ModelAndView header = getHeader(map,req,res,db);
+            ModelAndView header = getHeader(map, req, res, db);
             return new ModelAndView(map, "templates/rating.ftl");
         }, freeMarkerEngine);
 
         get("/", (req, res) -> {
             HashMap<String, Object> map = new HashMap<>();
 
-            ModelAndView header = getHeader(map,req,res,db);
+            ModelAndView header = getHeader(map, req, res, db);
 
             return new ModelAndView(map, "templates/index.ftl");
         }, freeMarkerEngine);
 
         //Check flag
+        HashMap<String, Object> helpMap = new HashMap<>();
         post("/pass", (req, res) -> {
-
-            Set<String> set =  req.queryParams();
+            Set<String> set = req.queryParams();
             ArrayList<String> list = new ArrayList<>(set);
             String par = list.get(1);
             int task_id = Integer.parseInt(par);
-            int team_id = Integer.parseInt(getUserProfile(req,res).getId());
+            int team_id = Integer.parseInt(getUserProfile(req, res).getId());
             String val = req.queryParams(par).toLowerCase();
 
             List<Task> task = db.sql2o.open().createQuery(db.SELECT_TASK_BY_ID_SQL).addParameter("id", task_id).executeAndFetch(Task.class);
@@ -97,11 +99,15 @@ public class Main {
             int score = task.get(0).getScore();
 
             if (val.equals(flag)) {
-                try { db.sql2o.open().createQuery(db.INSERT_SQL).addParameter("team_id",team_id).addParameter("task_id",task_id).executeUpdate();
-                    db.sql2o.open().createQuery(db.UPDATE_TEAM_SQL).addParameter("val",score).addParameter("id",team_id).executeUpdate();
-                }  catch (Exception e) {
+                try {
+                    db.sql2o.open().createQuery(db.INSERT_SQL).addParameter("team_id", team_id).addParameter("task_id", task_id).executeUpdate();
+                    db.sql2o.open().createQuery(db.UPDATE_TEAM_SQL).addParameter("val", score).addParameter("id", team_id).executeUpdate();
+                } catch (Exception e) {
                     System.out.println(e);
                 }
+            } else if (!val.isEmpty()) {
+                helpMap.put("id", task_id);
+                helpMap.put("incorrect", "Flag is incorrect");
             }
             res.redirect("/tasks");
             return "";
@@ -116,34 +122,36 @@ public class Main {
                 int id = Integer.parseInt(userProfile.getId());
                 List<Task> task = db.sql2o.open().createQuery(db.SELECT_TASK_SQL).executeAndFetch(Task.class);
                 List<Task> not_solve_task = db.sql2o.open().createQuery(db.SELECT_NOT_SOLVE_SQL).addParameter("id", id).executeAndFetch(Task.class);
-
-
                 map.put("task", task);
                 map.put("not_solve_task", not_solve_task);
-        }
-                ModelAndView header = getHeader(map,req,res,db);
-                return new ModelAndView(map, "templates/tasks.ftl");
-        },freeMarkerEngine );
+            }
+            ModelAndView header = getHeader(map, req, res, db);
+            map.put("incorrect", helpMap.get("incorrect"));
+            map.put("id", helpMap.get("id"));
+            helpMap.remove("incorrect");
+            helpMap.remove("id");
+            return new ModelAndView(map, "templates/tasks.ftl");
+        }, freeMarkerEngine);
 
-        get("/login", (req,res) -> form(config.getClients(), req), freeMarkerEngine);
+        get("/login", (req, res) -> form(config.getClients(), req, res, loginInfo ), freeMarkerEngine);
 
         //get profile info
         get("/client", (req, res) -> {
-            UserProfile user = getUserProfile(req,res);
+            UserProfile user = getUserProfile(req, res);
             try {
                 int id = Integer.parseInt(user.getId());
                 HashMap<String, Object> map = new HashMap<>();
 
-                List<Team> list = db.sql2o.open().createQuery(db.SELECT_TEAM_SQL).addParameter("id",id).executeAndFetch(Team.class);
-                int place = getPlace(db,list,id);
+                List<Team> list = db.sql2o.open().createQuery(db.SELECT_TEAM_SQL).addParameter("id", id).executeAndFetch(Team.class);
+                int place = getPlace(db, list, id);
 
                 map.put("id", id);
                 map.put("name", user.getAttribute("username"));
                 map.put("place", place);
                 map.put("score", list.get(0).getScore());
 
-                ModelAndView header = getHeader(map,req,res,db);
-                return new ModelAndView(map,"/templates/" +
+                ModelAndView header = getHeader(map, req, res, db);
+                return new ModelAndView(map, "/templates/" +
                         "client.ftl");
             } catch (NullPointerException e) {
                 return null;
@@ -155,11 +163,13 @@ public class Main {
     //help methods
 
     //login
-    private static ModelAndView form(final Clients clients, Request req) {
-        final HashMap<String,Object> map = new HashMap<>();
+    private static ModelAndView form(final Clients clients, Request req, Response res, LoginInfo loginInfo) {
+        final HashMap<String, Object> map = new HashMap<>();
         final FormClient formClient = clients.findClient(FormClient.class);
-        map.put("title", "Login");
+        String error = loginInfo.getError();
         map.put("callbackUrl", formClient.getCallbackUrl());
+        map.put("title", "Login");
+        map.put("error", error);
         return new ModelAndView(map, "templates/login.ftl");
     }
     //get profile of auth user
@@ -192,7 +202,7 @@ public class Main {
         ModelAndView header = new ModelAndView(map, "templates/header.ftl");
         return header;
     }
-    //palace
+    //place
     private static int getPlace(DataBaseHelp db, List<Team> list, int id) {
         List<Team> rate = db.sql2o.open().createQuery(db.SELECT_TEAM_DESC_SQL).executeAndFetch(Team.class);
         int place = 0;
@@ -203,5 +213,9 @@ public class Main {
             }
         }
         return place;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 }

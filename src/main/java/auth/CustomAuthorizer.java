@@ -18,5 +18,6 @@ public class CustomAuthorizer implements Authorizer {
         final HttpProfile httpProfile = (HttpProfile) profile;
         final String username = httpProfile.getUsername();
         return StringUtils.startsWith(username, "jle");
+
     }
 }

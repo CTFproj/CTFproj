@@ -16,14 +16,13 @@ public class AuthConfigFactory implements ConfigFactory {
         this.freeMarkerEngine = freeMarkerEngine;
     }
 
-
     @Override
     public Config build() {
         // HTTP
-        final FormClient formClient = new FormClient("http://localhost:8080/login", new Authenticator());
+        Authenticator auth = new Authenticator();
+        final FormClient formClient = new FormClient("http://localhost:8080/login", auth);
         final IndirectBasicAuthClient indirectBasicAuthClient = new IndirectBasicAuthClient(new SimpleTestUsernamePasswordAuthenticator());
         final Clients clients = new Clients("http://localhost:8080/callback", formClient, indirectBasicAuthClient);
-
         final Config config = new Config(clients);
         config.setHttpActionAdapter(new AuthHttpActionAdapter(freeMarkerEngine));
         return config;

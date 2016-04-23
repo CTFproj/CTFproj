@@ -17,7 +17,7 @@
                                 <input type="text" class="form-control" name="${solve.getId()}" value="" >
                                 <div class="input-group-btn">
                                     <button type="submit" class="btn btn-default" name="submit">Submit</button>
-                                </div><!-- /btn-group -->
+                    </div><!-- /btn-group -->
                             </div><!-- /input-group -->
                            </div></div>
                         </form>
@@ -26,7 +26,10 @@
             </#list>
             <#if x>
                 <div class="row"><div class="col-md-4"><div class="alert alert-success" role="alert">Solved</div></div></div>
+            <#elseif id?? && id == task1_index+1>
+                <div class="row"><div class="col-md-4"><div class="alert alert-danger" role="alert">Wrong flag</div></div></div>
             </#if>
+
         </div>
         </div>
         </#list>
