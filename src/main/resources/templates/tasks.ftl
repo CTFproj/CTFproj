@@ -3,26 +3,26 @@
 <#if task??>
     <#list task as task1>
         <!-- Button trigger modal -->
-        <a class="btn btn-primary btn-lg ${task1.getName()}" href="#${task1.getName()}" >
+        <a class="btn btn-primary btn-lg ${task1.getNameWOS()}" href="#${task1.getNameWOS()}" >
             ${task1.getName()} - ${task1.getScore()}
         </a>
         <script>
             $(document).ready(function() {
-                if(window.location.href.indexOf('#${task1.getName()}') != -1) {
-                    $('#${task1.getName()}').modal('show');
+                if(window.location.href.indexOf('#${task1.getNameWOS()}') != -1) {
+                    $('#${task1.getNameWOS()}').modal('show');
                 }
-                $('.${task1.getName()}').click(function () {
-                    $('#${task1.getName()}').modal('show');
+                $('.${task1.getNameWOS()}').click(function () {
+                    $('#${task1.getNameWOS()}').modal('show');
                 });
             });
         </script>
         <!-- Modal -->
-        <div class="modal fade" id="${task1.getName()}" tabindex="-1" role="dialog" aria-labelledby="${task1.getName()}Label">
+        <div class="modal fade" id="${task1.getNameWOS()}" tabindex="-1" role="dialog" aria-labelledby="${task1.getNameWOS()}Label">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="${task1.getName()}Label">${task1.getName()}</h4>
+                        <h4 class="modal-title" id="${task1.getNameWOS()}Label">${task1.getName()}</h4>
                     </div>
                     <div class="modal-body">
                         <h1>${task1.getName()}</h1>

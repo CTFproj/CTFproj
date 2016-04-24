@@ -6,6 +6,7 @@ import auth.LoginInfo;
 import database.DataBaseHelp;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
+import model.JsonTransformer;
 import model.Task;
 import model.Team;
 import org.pac4j.core.client.Clients;
@@ -63,6 +64,7 @@ public class Main {
         before("/tasks", new RequiresAuthenticationFilter(config, "FormClient"));
         before("/logout", new RequiresAuthenticationFilter(config, "FormClient"));
         before("/pass", new RequiresAuthenticationFilter(config, "FormClient"));
+        before("/team/*", new RequiresAuthenticationFilter(config, "FormClient"));
 
         get("/logout", new AppLogout(config));
         post("/logout", new AppLogout(config));
@@ -90,8 +92,16 @@ public class Main {
             Set<String> set = req.queryParams();
             ArrayList<String> list = new ArrayList<>(set);
             String par = list.get(1);
+            if(par.equals("submit")) {
+                par = list.get(0);
+            }
             int task_id = Integer.parseInt(par);
-            int team_id = Integer.parseInt(getUserProfile(req, res).getId());
+            int team_id = 0;
+            try {team_id = Integer.parseInt(getUserProfile(req, res).getId());}
+            catch (NullPointerException e) {
+                System.out.println(e.toString());
+            }
+
             String val = req.queryParams(par).toLowerCase();
 
             List<Task> task = db.sql2o.open().createQuery(db.SELECT_TASK_BY_ID_SQL).addParameter("id", task_id).executeAndFetch(Task.class);
@@ -183,12 +193,14 @@ public class Main {
             return new ModelAndView(map, "/templates/team.ftl");
         }, freeMarkerEngine);
 
+        get("/admin/task", "application/json", (request, response) -> {
+            List<Task> list = db.sql2o.open().createQuery("SELECT id,name,des,score,category FROM task ORDER BY category").executeAndFetch(Task.class);
+            HashMap<String, Object> registerResults = new HashMap<String, Object>();
+            registerResults.put("tasks", list);
+            return registerResults;
+        }, new JsonTransformer());
 
     }
-
-
-
-
     //help methods
 
     //login
@@ -224,7 +236,7 @@ public class Main {
         if(path.equals("")) {
             path = "Main";
         } else {
-            path = path.substring(0,1).toUpperCase() + path.substring(1);
+            path = path.substring(0,1).toUpperCase() + path.substring(1).replace("/"," - ");
 
         }
         map.put("title", path);
@@ -243,6 +255,7 @@ public class Main {
         }
         return place;
     }
+
     //solve tasks
     private static List<Task> getSolvdeTask(DataBaseHelp db) {
         List<Task> tasks = db.sql2o.open().createQuery(db.SELECT_TASK_SQL).executeAndFetch(Task.class);

@@ -16,6 +16,14 @@ public class Task {
         this.score = score;
         this.category = category;
     }
+    public Task(int id, String name, String des, int score, String category) {
+        this.id = id;
+        this.name = name;
+        this.des = des;
+        this.flag = flag;
+        this.score = score;
+        this.category = category;
+    }
 
     public int getId() {
         return id;
@@ -39,6 +47,9 @@ public class Task {
 
     public String getFlag() {
         return flag;
+    }
+    public String getNameWOS() {
+        return name.replace(" ", "");
     }
 }
 

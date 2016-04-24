@@ -7,7 +7,7 @@ public class DataBaseHelp{
     //SQL-request
     public String UPDATE_TEAM_SQL = "UPDATE team SET score = score + :val WHERE id = :id";
     public String SELECT_TEAM_SQL = "SELECT * FROM team WHERE id = :id";
-    public String SELECT_TASK_SQL = "SELECT * FROM task";
+    public String SELECT_TASK_SQL = "SELECT * FROM task ORDER BY category";
     public String SELECT_TASK_BY_ID_SQL = "SELECT * FROM task WHERE id = :id";
     public String INSERT_SQL = "INSERT INTO solve_task(team_id, task_id) VALUES ( :team_id, :task_id)";
     public String SELECT_TEAM_DESC_SQL = "SELECT * FROM team ORDER BY score DESC";
