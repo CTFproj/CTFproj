@@ -110,8 +110,8 @@ public class Main {
 
             if (val.equals(flag)) {
                 try {
-                    db.sql2o.open().createQuery(db.INSERT_SQL).addParameter("team_id", team_id).addParameter("task_id", task_id).executeUpdate();
-                    db.sql2o.open().createQuery(db.UPDATE_TEAM_SQL).addParameter("val", score).addParameter("id", team_id).executeUpdate();
+                    db.sql2o.open().createQuery(db.INSERT_SQL).addParameter("team_id", team_id).addParameter("task_id", task_id).executeUpdate().close();
+                    db.sql2o.open().createQuery(db.UPDATE_TEAM_SQL).addParameter("val", score).addParameter("id", team_id).executeUpdate().close();
                 } catch (Exception e) {
                     System.out.println(e.toString());
                 }
@@ -196,8 +196,11 @@ public class Main {
         get("/admin/task", "application/json", (request, response) -> {
             List<Task> list = db.sql2o.open().createQuery("SELECT id,name,des,score,category FROM task ORDER BY category").executeAndFetch(Task.class);
             HashMap<String, Object> registerResults = new HashMap<String, Object>();
-            registerResults.put("tasks", list);
-            return registerResults;
+            registerResults.put("id",list.get(0).getId());
+            registerResults.put("name",list.get(0).getName());
+            registerResults.put("des",list.get(0).getDes());
+            registerResults.put("score",list.get(0).getScore());
+            return list;
         }, new JsonTransformer());
 
     }

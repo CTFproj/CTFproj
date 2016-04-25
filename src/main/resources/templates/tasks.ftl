@@ -1,6 +1,18 @@
 <#include "header.ftl">
 <div class="container">
-<#if task??>
+    <script>
+                $.getJSON('/admin/task', function(data) {
+                    $.each(data, function (index, element) {
+                        $x = element.name
+                        console.log($x)
+                        $('body').append($('<div>', {
+                            text: "name: " + element.name + " id: " + element.id + " des: " +  element.des + " score: " +
+                                element.score + " category: " + element.category
+                        }));
+                    });
+                });
+    </script>
+    <#if task??>
     <#list task as task1>
         <!-- Button trigger modal -->
         <a class="btn btn-primary btn-lg ${task1.getNameWOS()}" href="#${task1.getNameWOS()}" >
