@@ -8,6 +8,8 @@ function gettasks() {
                 categories.push(category)
             }
         };
+        $('.container-tasks').html("");
+        $('.container-tasks').append($("<div class='tasks'></div>"));
         // console.log(categories);
         for (var i = 0; i <= tasks.length-1; i++) {
             var taskinfo = tasks[i];
@@ -32,7 +34,6 @@ $(function() {
     gettasks();
 });
 setInterval(update, 300000);
-
 function loadtask(id) {
     obj = $.grep(tasks, function (e) {
         return e.id == id;

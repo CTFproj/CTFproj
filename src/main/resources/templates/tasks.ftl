@@ -1,9 +1,6 @@
 <#include "header.ftl">
 <div class="container">
-    <div class="tasks">
-
-    </div>
-
+    <div class="container-tasks"></div>
     <!-- Modal -->
     <div class="modal fade" id="task-window" tabindex="-1" role="dialog" aria-labelledby="task-windowLabel">
         <div class="modal-dialog" role="document">
