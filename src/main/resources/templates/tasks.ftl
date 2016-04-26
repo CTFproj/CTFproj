@@ -11,11 +11,13 @@
                 </div>
                 <div class="modal-body">
                     <p>score - <span class="score"></span></p>
+                    <p>cat - <span class="cat"></span> </p>
                     <p>desc - <span class="desc"></span></p>
                 </div>
             </div>
         </div>
     </div>
-<script src="/tasks.js"></script>
 </div>
+<script src="/jquery.quicksand.js"></script>
+<script src="/tasks.js"></script>
 <#include "footer.ftl">

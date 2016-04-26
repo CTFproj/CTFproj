@@ -38,3 +38,17 @@ body {
 .jumbotron {
 	background: #fff;
 }
+
+#tasks-nav li a{
+	color:#777;
+}
+#tasks-nav li a:hover {
+	background: #777777;
+	color:#fff;
+}
+#tasks-nav>li.active>a, #tasks-nav>li.active>a:hover {
+	color:#fff;
+}
+.tasks {
+	margin-top: 10px;
+}
