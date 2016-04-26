@@ -90,7 +90,7 @@
             else if (data == 1){ // Challenge Solved
                 $("#correct-key").slideDown();
                 $("#task-submit").remove();
-                $("#task-submit").remove();
+                $("#task-input").remove();
             }
             setTimeout(function(){
                 $('.alert').slideUp();
