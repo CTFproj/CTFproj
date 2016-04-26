@@ -20,6 +20,9 @@
                     <div id="correct-key" class="alert alert-success alert-dismissable" role="alert">
                         <strong>Правильно</strong>
                     </div>
+                    <div id="task-solved" class="alert alert-success alert-dismissable" role="alert">
+                        <strong>Решено</strong>
+                    </div>
                 </div>
             </div>
         </div>
