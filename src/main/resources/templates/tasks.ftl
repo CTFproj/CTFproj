@@ -14,7 +14,8 @@
                     <p>cat - <span class="cat"></span> </p>
                     <p>desc - <span class="desc"></span></p>
                     <div class="input-group">
-                        <input id="task-input" type="text" class="form-control" value="" >
+                        <input id="task-id" type="hidden">
+                        <input id="task-input" type="text" class="form-control" placeholder="flag{!s_HeRe}" >
                             <div class="input-group-btn">
                                 <button id="task-submit" type="submit" class="btn btn-default" name="submit">Submit</button>
                             </div><!-- /btn-group -->

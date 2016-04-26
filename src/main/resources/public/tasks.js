@@ -71,11 +71,14 @@
     });
 
 
-    function tasksubmit(flag) {
+    function tasksubmit(id, flag) {
         $('#task-submit').addClass("disabled-button");
         $('#task-submit').prop('disabled', true);
         $('#task-input').prop('disabled', true);
-        $.post("/pass", flag, function (data) {
+        $.post("/pass", {
+            taskid: id,
+            flg: flag
+        }, function (data) {
             if (data == 0){ // Incorrect key
                 $("#incorrect-key").slideDown();
                 $("#answer-input").addClass("wrong");
@@ -99,7 +102,7 @@
     }
 
     $('#task-submit').click(function (e) {
-        tasksubmit($('#task-input').val());
+        tasksubmit($('#task-id').val(), $('#task-input').val());
     });
 
     function update(){
@@ -132,9 +135,18 @@
         chal.find('.score').text(obj.score);
         chal.find('.cat').text(obj.category);
         chal.find('.desc').html(obj.des);
+        $('#task-id').attr('value', obj.id);
+        $('#task-input').val("");
     }
 
     $('#task-window').on('hide.bs.modal', function (event) {
         document.location.hash = "";
+        $("#task-input").removeClass("wrong");
+        $("#task-input").removeClass("correct");
+        $('#task-submit').removeClass("disabled-button");
+        $('#task-submit').prop('disabled', false);
+        $('#task-input').prop('disabled', false);
+        $("#incorrect-key").slideUp();
+        $("#correct-key").slideUp();
     });
 
