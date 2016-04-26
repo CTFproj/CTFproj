@@ -13,13 +13,7 @@
                     <p>score - <span class="score"></span></p>
                     <p>cat - <span class="cat"></span> </p>
                     <p>desc - <span class="desc"></span></p>
-                    <div class="input-group">
-                        <input id="task-id" type="hidden">
-                        <input id="task-input" type="text" class="form-control" placeholder="flag{!s_HeRe}" >
-                            <div class="input-group-btn">
-                                <button id="task-submit" type="submit" class="btn btn-default" name="submit">Submit</button>
-                            </div><!-- /btn-group -->
-                    </div><!-- /input-group -->
+                    <div class="input-group"></div>
                     <div id="incorrect-key" class="alert alert-danger alert-dismissable" role="alert">
                         <strong>Неправильно</strong>
                     </div>

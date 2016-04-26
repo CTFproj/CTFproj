@@ -63,10 +63,9 @@
             });
         });
     }
-
-    $("#task-input").keyup(function(event){
+    $('#task-window').on('keyup', '#task-input', function (event) {
         if(event.keyCode == 13){
-            $("#task-submit").click();
+            tasksubmit($('#task-id').val(), $('#task-input').val());
         }
     });
 
@@ -82,7 +81,6 @@
             if (data == 0){ // Incorrect key
                 $("#incorrect-key").slideDown();
                 $("#answer-input").addClass("wrong");
-                $("#answer-input").removeClass("correct");
                 setTimeout(function() {
                     $("#answer-input").removeClass("wrong");
                 }, 3000);
@@ -100,8 +98,7 @@
             }, 3000);
         })
     }
-
-    $('#task-submit').click(function (e) {
+    $('#task-window').on('click', '#task-submit', function () {
         tasksubmit($('#task-id').val(), $('#task-input').val());
     });
 
@@ -135,14 +132,16 @@
         chal.find('.score').text(obj.score);
         chal.find('.cat').text(obj.category);
         chal.find('.desc').html(obj.des);
-        $('#task-id').attr('value', obj.id);
         $('#task-input').val("");
+        $('.input-group').html("");
+        $('.input-group').append($("<input id='task-id' type='hidden' value='"+ obj.id +"'>"));
+        $('.input-group').append($("<input id='task-input' type='text' class='form-control' placeholder='flag{!s_HeRe}'>"));
+        $('.input-group').append($("<div class='input-group-btn'><button id='task-submit' type='submit' class='btn btn-default' name='submit'>Submit</button></div>"));
     }
 
     $('#task-window').on('hide.bs.modal', function (event) {
         document.location.hash = "";
         $("#task-input").removeClass("wrong");
-        $("#task-input").removeClass("correct");
         $('#task-submit').removeClass("disabled-button");
         $('#task-submit').prop('disabled', false);
         $('#task-input').prop('disabled', false);
