@@ -174,6 +174,8 @@
                 return 'btn-primary';
            }
             else if (data == 1){ // Challenge Solved
+                $("#task-submit").remove();
+                $("#task-input").remove();
                 return 'btn-success';
             }
         });

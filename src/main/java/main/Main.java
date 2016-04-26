@@ -109,6 +109,18 @@ public class Main {
             }
             return 0;
         });
+        post("/checktask", (req, res) -> {
+            UserProfile userProfile = getUserProfile(req,res);
+            int team_id = Integer.parseInt(userProfile.getId());
+            int task_id = Integer.parseInt(req.queryMap().get("taskid").value());
+            List<SolvedTask> solvedTasks = db.sql2o.open().createQuery("SELECT * FROM solve_task WHERE team_id = :team_id").addParameter("team_id", team_id).executeAndFetch(SolvedTask.class);
+            for(SolvedTask task: solvedTasks) {
+                if(task_id == task.getTask_id()) {
+                    return 1;
+                }
+            }
+           return 0;
+        });
 
         //Tasks for authorized users
         get(("/tasks"), (req, res) -> {

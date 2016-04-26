@@ -17,7 +17,7 @@
                     </tr>
                     <#list task as solve>
                         <tr>
-                            <td><a href="/tasks#${solve.getNameWOS()}">${solve.getName()}</a></td>
+                            <td><a href="/tasks#${solve.getName()}">${solve.getName()}</a></td>
                             <td>${solve.getScore()}</td>
                             <td>${solve.getCategory()}</td>
                         </tr>
