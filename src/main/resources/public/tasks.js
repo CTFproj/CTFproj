@@ -18,11 +18,10 @@
                 var taskinfo = tasks[i];
                 var taskid = taskinfo.name.replace(/\s/g,"-");
                 var taskcategoryid = taskinfo.category.replace(/\s/g,"-");
-                $('.tasks').append($("<button data-id='id-"+ (i+1) +"' data-category='"+ taskcategoryid +"' class='task-button btn btn-primary btn-lg' value='"+ taskinfo.id +"' data-toggle='modal' data-target='#task-window'>" + taskinfo.name +" - "  + taskinfo.score + "</button>"));
+                $('.tasks').append($("<div data-id='id-"+ i +"' data-category='"+ taskcategoryid +"' class='task-button btn btn-primary btn-lg' data-value='"+ taskinfo.id +"' data-toggle='modal' data-target='#task-window'>" + taskinfo.name +" - "  + taskinfo.score + "</div>"));
             };
-            $('body').on('click', 'button.task-button', function () {
-                loadtask(this.value);
-                console.log('call function loadtask by id - ' + this.value);
+            $('body').on('click', 'div.task-button', function () {
+                loadtask($(this).data('value'));
             });
             if (window.location.hash.length > 0){
                 loadtaskbyname(window.location.hash.substring(1));
@@ -50,12 +49,12 @@
                 if ($filterCategory == 'all') {
                     // assign all li items to the $filteredData var when
                     // the 'All' filter option is clicked
-                    var $filteredData = $data.find('button');
+                    var $filteredData = $data.find('div');
                 }
                 else {
                     // find all li elements that have our required $filterType
                     // values for the data-type element
-                    var $filteredData = $data.find("button[data-category='" + $filterCategory + "']");
+                    var $filteredData = $data.find("div[data-category='" + $filterCategory + "']");
                 }
 
                 // call quicksand and assign transition parameters
@@ -64,6 +63,45 @@
             });
         });
     }
+
+    $("#task-input").keyup(function(event){
+        if(event.keyCode == 13){
+            $("#task-submit").click();
+        }
+    });
+
+
+    function tasksubmit(flag) {
+        $('#task-submit').addClass("disabled-button");
+        $('#task-submit').prop('disabled', true);
+        $('#task-input').prop('disabled', true);
+        $.post("/pass", flag, function (data) {
+            if (data == 0){ // Incorrect key
+                $("#incorrect-key").slideDown();
+                $("#answer-input").addClass("wrong");
+                $("#answer-input").removeClass("correct");
+                setTimeout(function() {
+                    $("#answer-input").removeClass("wrong");
+                }, 3000);
+            }
+            else if (data == 1){ // Challenge Solved
+                $("#correct-key").slideDown();
+                $("#task-submit").remove();
+                $("#task-submit").remove();
+            }
+            setTimeout(function(){
+                $('.alert').slideUp();
+                $('#task-submit').removeClass("disabled-button");
+                $('#task-submit').prop('disabled', false);
+                $('#task-input').prop('disabled', false);
+            }, 3000);
+        })
+    }
+
+    $('#task-submit').click(function (e) {
+        tasksubmit($('#task-input').val());
+    });
+
     function update(){
         gettasks()
     }
