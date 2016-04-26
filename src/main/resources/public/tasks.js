@@ -18,7 +18,8 @@
                 var taskinfo = tasks[i];
                 var taskid = taskinfo.name.replace(/\s/g,"-");
                 var taskcategoryid = taskinfo.category.replace(/\s/g,"-");
-                $('.tasks').append($("<div data-id='id-"+ i +"' data-category='"+ taskcategoryid +"' class='task-button btn btn-lg " + checktask(taskinfo.id) + "' data-value='"+ taskinfo.id +"' data-toggle='modal' data-target='#task-window'>" + taskinfo.name +" - "  + taskinfo.score + "</div>"));
+                $('.tasks').append($("<div data-id='id-"+ i +"' data-category='"+ taskcategoryid +"' class='task-button btn btn-lg btn-primary' data-value='"+ taskinfo.id +"' data-toggle='modal' data-target='#task-window'>" + taskinfo.name +" - "  + taskinfo.score + "</div>"));
+                checktask(taskinfo.id);
             };
             $('body').on('click', 'div.task-button', function () {
                 loadtask($(this).data('value'));
@@ -172,11 +173,9 @@
         $.post("/checktask", {
             taskid: id
         }, function (data) {
-            if (data == 0){ // Incorrect key
-                return 'btn-primary';
-           }
-            else if (data == 1){ // Challenge Solved
-                return 'btn-success';
+            if (data == 1){ // Challenge Solved
+                $('div[data-value="' + id + '"]').removeClass('btn-primary');
+                $('div[data-value="' + id + '"]').addClass("btn-success");
             }
         });
     }
