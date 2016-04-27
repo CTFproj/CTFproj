@@ -20,7 +20,6 @@ public class Task {
         this.id = id;
         this.name = name;
         this.des = des;
-        this.flag = flag;
         this.score = score;
         this.category = category;
     }

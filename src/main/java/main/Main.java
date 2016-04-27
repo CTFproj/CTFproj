@@ -7,6 +7,7 @@ import database.DataBaseHelp;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
 import model.JsonTransformer;
+import model.SolvedTask;
 import model.Task;
 import model.Team;
 import org.pac4j.core.client.Clients;
@@ -28,7 +29,6 @@ import spark.template.freemarker.FreeMarkerEngine;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import static spark.Spark.*;
 
@@ -89,43 +89,41 @@ public class Main {
         //Check flag
         HashMap<String, Object> helpMap = new HashMap<>();
         post("/pass", (req, res) -> {
-            Set<String> set = req.queryParams();
-            ArrayList<String> list = new ArrayList<>(set);
-            String par = list.get(1);
-            if(par.equals("submit")) {
-                par = list.get(0);
-            }
-            int task_id = Integer.parseInt(par);
-            int team_id = 0;
-            try {team_id = Integer.parseInt(getUserProfile(req, res).getId());}
-            catch (NullPointerException e) {
-                System.out.println(e.toString());
-            }
-
-            String val = req.queryParams(par).toLowerCase();
-
+            UserProfile userProfile = getUserProfile(req, res);
+            int task_id = Integer.parseInt(req.queryMap().get("taskid").value());
+            int team_id = Integer.parseInt(userProfile.getId());
+            String check_flag = req.queryMap().get("flg").value();
+            List<SolvedTask> solvedTasks = db.sql2o.open().createQuery("SELECT * FROM solve_task WHERE team_id = :team_id").addParameter("team_id", team_id).executeAndFetch(SolvedTask.class);
             List<Task> task = db.sql2o.open().createQuery(db.SELECT_TASK_BY_ID_SQL).addParameter("id", task_id).executeAndFetch(Task.class);
             String flag = task.get(0).getFlag();
             int score = task.get(0).getScore();
-
-            if (val.equals(flag)) {
+            if (check_flag.equals(flag)) {
                 try {
-                    db.sql2o.open().createQuery(db.INSERT_SQL).addParameter("team_id", team_id).addParameter("task_id", task_id).executeUpdate();
-                    db.sql2o.open().createQuery(db.UPDATE_TEAM_SQL).addParameter("val", score).addParameter("id", team_id).executeUpdate();
+                    db.sql2o.open().createQuery(db.INSERT_SQL).addParameter("team_id", team_id).addParameter("task_id", task_id).executeUpdate().close();
+                    db.sql2o.open().createQuery(db.UPDATE_TEAM_SQL).addParameter("val", score).addParameter("id", team_id).executeUpdate().close();
+                    return 1;
                 } catch (Exception e) {
-                    System.out.println(e.toString());
+                    System.err.println(e);
+                    return 1;
                 }
-            } else if (!val.isEmpty()) {
-                helpMap.put("id", task_id);
-                helpMap.put("incorrect", "Flag is incorrect");
             }
-            res.redirect("/tasks");
-            return "";
+            return 0;
+        });
+        post("/checktask", (req, res) -> {
+            UserProfile userProfile = getUserProfile(req,res);
+            int team_id = Integer.parseInt(userProfile.getId());
+            int task_id = Integer.parseInt(req.queryMap().get("taskid").value());
+            List<SolvedTask> solvedTasks = db.sql2o.open().createQuery("SELECT * FROM solve_task WHERE team_id = :team_id").addParameter("team_id", team_id).executeAndFetch(SolvedTask.class);
+            for(SolvedTask task: solvedTasks) {
+                if(task_id == task.getTask_id()) {
+                    return 1;
+                }
+            }
+           return 0;
         });
 
         //Tasks for authorized users
         get(("/tasks"), (req, res) -> {
-
             HashMap<String, Object> map = new HashMap<>();
             if (getUserProfile(req, res) != null) {
                 UserProfile userProfile = getUserProfile(req, res);
@@ -195,9 +193,7 @@ public class Main {
 
         get("/admin/task", "application/json", (request, response) -> {
             List<Task> list = db.sql2o.open().createQuery("SELECT id,name,des,score,category FROM task ORDER BY category").executeAndFetch(Task.class);
-            HashMap<String, Object> registerResults = new HashMap<String, Object>();
-            registerResults.put("tasks", list);
-            return registerResults;
+            return list;
         }, new JsonTransformer());
 
     }
