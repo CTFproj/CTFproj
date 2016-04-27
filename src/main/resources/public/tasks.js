@@ -77,6 +77,7 @@
             }
             else if (data == 1){ // Challenge Solved
                 $("#correct-key").slideDown();
+                $('.' + id + '').addClass('btn-success');
                 $("#task-submit").remove();
                 $("#task-input").remove();
                 setTimeout(function(){
