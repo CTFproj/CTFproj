@@ -55,3 +55,7 @@ body {
 .alert {
 	display: none;
 }
+
+.login {
+	display: block;
+}
