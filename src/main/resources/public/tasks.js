@@ -3,22 +3,24 @@
             tasks = $.parseJSON(JSON.stringify(data));
             var categories = [];
             $('.container-tasks').html("");
-            $('.container-tasks').append($("<ul id='tasks-nav' class='nav nav-pills'></ul>"));
-            $('#tasks-nav').append($("<li class='active' role='presentation'><a href='#' class='all'>all</a></li>"));
+            $('.container-tasks').append($("<div id='tasks-nav' class='button-group'></div>"));
+            $('#tasks-nav').append($("<button class='btn btn-default is-checked' data-filter='*'>all</button>"));
             for (var i = tasks.length-1; i >= 0; i--) {
                 if ($.inArray(tasks[i]['category'], categories) == -1) {
                     var category = tasks[i]['category'];
                     categories.push(category);
                     var categoryid = category.replace(/ /g,"-");
-                    $('#tasks-nav').append($("<li role='presentation'><a href='#' class='"+ categoryid + "'>"+ category +"</a></li>"));
+                    $('#tasks-nav').append($("<button class='btn btn-default' data-filter='."+ categoryid + "'>"+ category +"</button>"));
                 }
             };
+            $('#tasks-nav').append($("<button class='btn btn-default pull-right' data-filter='.btn-success'>solv</button>"));
+            $('#tasks-nav').append($("<button class='btn btn-default pull-right' data-filter='.btn-primary'>not solv</button>"));
             $('.container-tasks').append($("<div class='tasks'></div>"));
             for (var i = 0; i <= tasks.length-1; i++) {
                 var taskinfo = tasks[i];
                 var taskid = taskinfo.name.replace(/\s/g,"-");
                 var taskcategoryid = taskinfo.category.replace(/\s/g,"-");
-                $('.tasks').append($("<div data-id='id-"+ i +"' data-category='"+ taskcategoryid +"' class='task-button btn btn-lg btn-primary' data-value='"+ taskinfo.id +"' data-toggle='modal' data-target='#task-window'>" + taskinfo.name +" - "  + taskinfo.score + "</div>"));
+                $('.tasks').append($("<div class='task-button "+ taskcategoryid + " " + taskinfo.id +" btn btn-lg' data-value='"+ taskinfo.id +"' data-toggle='modal' data-target='#task-window'>" + taskinfo.name +" - "  + taskinfo.score + "</div>"));
                 checktask(taskinfo.id);
             };
             $('body').on('click', 'div.task-button', function () {
@@ -29,38 +31,25 @@
                 $("#task-window").modal("show");
             }
 
-            // get the action filter option item on page load
-            var $filterCategory = $('#tasks-nav li.active a').attr('class');
+            var $container = $('.tasks').isotope({
+                itemSelector: '.task-button',
+                layoutMode: 'fitRows'
+            });
 
-            // get and assign the ourHolder element to the
-            // $holder varible for use later
-            var $holder = $('div.tasks');
-            // clone all items within the pre-assigned $holder element
-            var $data = $holder.clone();
-            // attempt to call Quicksand when a filter option
-            // item is clicked
-            $('#tasks-nav li a').click(function(e) {
-                // reset the active class on all the buttons
-                $('#tasks-nav li').removeClass('active');
+            // bind filter button click
+            $('#tasks-nav').on( 'click', 'button', function() {
+                var filterValue = $( this ).attr('data-filter');
+                // use filterFn if matches value
+                $container.isotope({ filter: filterValue });
+            });
 
-                // assign the class of the clicked filter option
-                // element to our $filterType variable
-                var $filterCategory = $(this).attr('class');
-                $(this).parent().addClass('active');
-                if ($filterCategory == 'all') {
-                    // assign all li items to the $filteredData var when
-                    // the 'All' filter option is clicked
-                    var $filteredData = $data.find('div');
-                }
-                else {
-                    // find all li elements that have our required $filterType
-                    // values for the data-type element
-                    var $filteredData = $data.find("div[data-category='" + $filterCategory + "']");
-                }
-
-                // call quicksand and assign transition parameters
-                // $holder.quicksand($filteredData, {
-                $holder.quicksand($filteredData);
+            // change is-checked class on buttons
+            $('#tasks-nav').each( function( i, buttonGroup ) {
+                var $buttonGroup = $( buttonGroup );
+                $buttonGroup.on( 'click', 'button', function() {
+                    $buttonGroup.find('.is-checked').removeClass('is-checked');
+                    $( this ).addClass('is-checked');
+                });
             });
         });
     }
@@ -173,9 +162,13 @@
         $.post("/checktask", {
             taskid: id
         }, function (data) {
-            if (data == 1){ // Challenge Solved
-                $('div[data-value="' + id + '"]').removeClass('btn-primary');
-                $('div[data-value="' + id + '"]').addClass("btn-success");
+            if (data == 0){
+                $('.' + id + '').removeClass('btn-success');
+                $('.' + id + '').addClass('btn-primary');
+            }
+            else if (data == 1){ // Challenge Solved
+                $('.' + id + '').removeClass('btn-primary');
+                $('.' + id + '').addClass('btn-success');
             }
         });
     }

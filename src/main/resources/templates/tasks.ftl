@@ -28,6 +28,6 @@
         </div>
     </div>
 </div>
-<script src="/jquery.quicksand.js"></script>
+<script src="/isotope.pkgd.min.js"></script>
 <script src="/tasks.js"></script>
 <#include "footer.ftl">

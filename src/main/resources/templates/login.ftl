@@ -2,12 +2,11 @@
 <div class="container">
     <form class="form-signin" action="${callbackUrl}" method="POST">
         <#if error??>
-            <div class="alert alert-danger login">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            <span class="sr-only">Error:</span>
-            ${error}
-        </div>
-
+            <div class="alert alert-danger">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                ${error}
+            </div>
         </#if>
             <h2 class="form-signin-heading">Please sign in</h2>
             <label for="inputLogin" class="sr-only">Login</label>
