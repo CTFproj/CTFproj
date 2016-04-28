@@ -3,22 +3,23 @@
             tasks = $.parseJSON(JSON.stringify(data));
             var categories = [];
             $('.container-tasks').html("");
-            $('.container-tasks').append($("<div id='tasks-nav' class='button-group'></div>"));
-            $('#tasks-nav').append($("<button class='btn btn-default is-checked' data-filter='*'>all</button>"));
+            $('.container-tasks').append($("<div id='tasks-nav-cat' class='button-group' data-filter-group='category'><h3>Category</h3></div>"));
+            $('#tasks-nav-cat').append($("<button class='btn btn-default is-checked' data-filter=''>all cat</button>"));
             for (var i = tasks.length-1; i >= 0; i--) {
                 if ($.inArray(tasks[i]['category'], categories) == -1) {
                     var category = tasks[i]['category'];
                     categories.push(category);
                     var categoryid = category.replace(/ /g,"-");
-                    $('#tasks-nav').append($("<button class='btn btn-default' data-filter='."+ categoryid + "'>"+ category +"</button>"));
+                    $('#tasks-nav-cat').append($("<button class='btn btn-default' data-filter='."+ categoryid + "'>"+ category +"</button>"));
                 }
             };
-            $('#tasks-nav').append($("<button class='btn btn-default pull-right' data-filter='.btn-success'>solv</button>"));
-            $('#tasks-nav').append($("<button class='btn btn-default pull-right' data-filter='.btn-primary'>not solv</button>"));
+            $('.container-tasks').append($("<div id='tasks-nav-sol' class='button-group' data-filter-group='solution'><h3>Solved?</h3></div>"));
+            $('#tasks-nav-sol').append($("<button class='btn btn-default is-checked' data-filter=''>all tasks</button>"));
+            $('#tasks-nav-sol').append($("<button class='btn btn-success' data-filter='.btn-success'>solv</button>"));
+            $('#tasks-nav-sol').append($("<button class='btn btn-primary' data-filter='.btn-primary'>not solv</button>"));
             $('.container-tasks').append($("<div class='tasks'></div>"));
             for (var i = 0; i <= tasks.length-1; i++) {
                 var taskinfo = tasks[i];
-                var taskid = taskinfo.name.replace(/\s/g,"-");
                 var taskcategoryid = taskinfo.category.replace(/\s/g,"-");
                 $('.tasks').append($("<div class='task-button "+ taskcategoryid + " " + taskinfo.id +" btn btn-lg' data-value='"+ taskinfo.id +"' data-toggle='modal' data-target='#task-window'>" + taskinfo.name +" - "  + taskinfo.score + "</div>"));
                 checktask(taskinfo.id);
@@ -36,21 +37,33 @@
                 layoutMode: 'fitRows'
             });
 
-            // bind filter button click
-            $('#tasks-nav').on( 'click', 'button', function() {
-                var filterValue = $( this ).attr('data-filter');
-                // use filterFn if matches value
+            var filters = {};
+
+            $('#task-nav').on( 'click', 'button', function() {
+                var $this = $(this);
+                var $buttonGroup = $this.parents('.button-group');
+                var filterGroup = $buttonGroup.attr('data-filter-group');
+                filters[ filterGroup ] = $this.attr('data-filter');
+                var filterValue = concatValues( filters );
                 $container.isotope({ filter: filterValue });
             });
 
-            // change is-checked class on buttons
-            $('#tasks-nav').each( function( i, buttonGroup ) {
+            $('.button-group').each( function( i, buttonGroup ) {
                 var $buttonGroup = $( buttonGroup );
                 $buttonGroup.on( 'click', 'button', function() {
                     $buttonGroup.find('.is-checked').removeClass('is-checked');
                     $( this ).addClass('is-checked');
                 });
             });
+
+            function concatValues( obj ) {
+                var value = '';
+                for ( var prop in obj ) {
+                    value += obj[ prop ];
+                }
+                return value;
+            }
+
         });
     }
     $('#task-window').on('keyup', '#task-input', function (event) {
@@ -85,7 +98,7 @@
             }
             else if (data == 1){ // Challenge Solved
                 $("#correct-key").slideDown();
-                $('.' + id + '').addClass('btn-success');
+                $('.' + id + '').removeClass('btn-primary').addClass('btn-success');
                 $("#task-submit").remove();
                 $("#task-input").remove();
                 setTimeout(function(){
@@ -172,12 +185,10 @@
             taskid: id
         }, function (data) {
             if (data == 0){
-                $('.' + id + '').removeClass('btn-success');
-                $('.' + id + '').addClass('btn-primary');
+                $('.' + id + '').removeClass('btn-success').addClass('btn-primary');
             }
             else if (data == 1){ // Challenge Solved
-                $('.' + id + '').removeClass('btn-primary');
-                $('.' + id + '').addClass('btn-success');
+                $('.' + id + '').removeClass('btn-primary').addClass('btn-success');
             }
         });
     }
