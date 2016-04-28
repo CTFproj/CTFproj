@@ -65,6 +65,7 @@ public class Main {
         before("/logout", new RequiresAuthenticationFilter(config, "FormClient"));
         before("/pass", new RequiresAuthenticationFilter(config, "FormClient"));
         before("/team/*", new RequiresAuthenticationFilter(config, "FormClient"));
+        before("/admin/task", new RequiresAuthenticationFilter(config, "FormClient"));
 
         get("/logout", new AppLogout(config));
         post("/logout", new AppLogout(config));
@@ -92,10 +93,10 @@ public class Main {
             UserProfile userProfile = getUserProfile(req, res);
             int task_id = Integer.parseInt(req.queryMap().get("taskid").value());
             int team_id = Integer.parseInt(userProfile.getId());
-            String check_flag = req.queryMap().get("flg").value();
+            String check_flag = req.queryMap().get("flg").value().toLowerCase();
             List<SolvedTask> solvedTasks = db.sql2o.open().createQuery("SELECT * FROM solve_task WHERE team_id = :team_id").addParameter("team_id", team_id).executeAndFetch(SolvedTask.class);
             List<Task> task = db.sql2o.open().createQuery(db.SELECT_TASK_BY_ID_SQL).addParameter("id", task_id).executeAndFetch(Task.class);
-            String flag = task.get(0).getFlag();
+            String flag = task.get(0).getFlag().toLowerCase();
             int score = task.get(0).getScore();
             if (check_flag.equals(flag)) {
                 try {

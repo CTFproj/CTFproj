@@ -59,6 +59,14 @@
         }
     });
 
+    $("#task-window").on('keyup', function(e) {
+        if (e.which === 27) update();
+    });
+
+    $('button.close').click( function () {
+       update();
+    });
+
 
     function tasksubmit(id, flag) {
         $('#task-submit').addClass("disabled-button");
