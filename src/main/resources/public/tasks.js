@@ -31,14 +31,11 @@
                 loadtaskbyname(window.location.hash.substring(1));
                 $("#task-window").modal("show");
             }
-
             var $container = $('.tasks').isotope({
                 itemSelector: '.task-button',
                 layoutMode: 'fitRows'
             });
-
             var filters = {};
-
             $('#task-nav').on( 'click', 'button', function() {
                 var $this = $(this);
                 var $buttonGroup = $this.parents('.button-group');
@@ -47,7 +44,6 @@
                 var filterValue = concatValues( filters );
                 $container.isotope({ filter: filterValue });
             });
-
             $('.button-group').each( function( i, buttonGroup ) {
                 var $buttonGroup = $( buttonGroup );
                 $buttonGroup.on( 'click', 'button', function() {
@@ -55,7 +51,6 @@
                     $( this ).addClass('is-checked');
                 });
             });
-
             function concatValues( obj ) {
                 var value = '';
                 for ( var prop in obj ) {
@@ -63,7 +58,6 @@
                 }
                 return value;
             }
-
         });
     }
     $('#task-window').on('keyup', '#task-input', function (event) {
@@ -71,16 +65,6 @@
             tasksubmit($('#task-id').val(), $('#task-input').val());
         }
     });
-
-    $("#task-window").on('keyup', function(e) {
-        if (e.which === 27) update();
-    });
-
-    $('button.close').click( function () {
-       update();
-    });
-
-
     function tasksubmit(id, flag) {
         $('#task-submit').addClass("disabled-button");
         $('#task-submit').prop('disabled', true);
@@ -91,23 +75,15 @@
         }, function (data) {
             if (data == 0){ // Incorrect key
                 $("#incorrect-key").slideDown();
-                $("#answer-input").addClass("wrong");
-                setTimeout(function() {
-                    $("#answer-input").removeClass("wrong");
-                }, 3000);
             }
             else if (data == 1){ // Challenge Solved
                 $("#correct-key").slideDown();
                 $('.' + id + '').removeClass('btn-primary').addClass('btn-success');
                 $("#task-submit").remove();
                 $("#task-input").remove();
-                setTimeout(function(){
-                    $('#task-solved').fadeIn('fast');
-                }, 3000);
             }
             setTimeout(function(){
                 $('#incorrect-key').slideUp();
-                $('#correct-key').slideUp();
                 $('#task-submit').removeClass("disabled-button");
                 $('#task-submit').prop('disabled', false);
                 $('#task-input').prop('disabled', false);
@@ -117,30 +93,25 @@
     $('#task-window').on('click', '#task-submit', function () {
         tasksubmit($('#task-id').val(), $('#task-input').val());
     });
-
     function update(){
         gettasks()
     }
-
     $(function() {
         gettasks();
     });
     setInterval(update, 300000);
-
     function loadtask(id) {
         obj = $.grep(tasks, function (e) {
             return e.id == id;
         })[0];
         updateTaskWindow(obj);
     }
-
     function loadtaskbyname(taskname) {
         obj = $.grep(tasks, function (e) {
             return e.name == taskname;
         })[0];
         updateTaskWindow(obj);
     }
-
     function updateTaskWindow(obj) {
         window.location.hash = obj.name;
         var chal = $('#task-window');
@@ -150,7 +121,6 @@
         chal.find('.desc').html(obj.des);
         checktaskwindow(obj.id);
     }
-
     $('#task-window').on('hide.bs.modal', function (event) {
         document.location.hash = "";
         $("#task-input").removeClass("wrong");
@@ -159,9 +129,7 @@
         $('#task-input').prop('disabled', false);
         $("#incorrect-key").slideUp();
         $("#correct-key").slideUp();
-        $('#task-solved').slideUp();
     });
-
     function checktaskwindow(id) {
         $.post("/checktask", {
             taskid: id
@@ -173,13 +141,12 @@
                 $('.input-group').append($("<div class='input-group-btn'><button id='task-submit' type='submit' class='btn btn-default' name='submit'>Submit</button></div>"));
             }
             else if (data == 1){ // Challenge Solved
-                $('#task-solved').fadeIn('fast');
+                $('#correct-key').show();
                 $("#task-submit").remove();
                 $("#task-input").remove();
             }
         });
     }
-
     function checktask(id) {
         $.post("/checktask", {
             taskid: id

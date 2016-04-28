@@ -15,13 +15,10 @@
                     <p>desc - <span class="desc"></span></p>
                     <div class="input-group"></div>
                     <div id="incorrect-key" class="alert alert-danger alert-dismissable" role="alert">
-                        <strong>Неправильно</strong>
+                        <strong>Неверный флаг</strong>
                     </div>
                     <div id="correct-key" class="alert alert-success alert-dismissable" role="alert">
-                        <strong>Правильно</strong>
-                    </div>
-                    <div id="task-solved" class="alert alert-success alert-dismissable" role="alert">
-                        <strong>Решено</strong>
+                        <strong>Задание решено</strong>
                     </div>
                 </div>
             </div>

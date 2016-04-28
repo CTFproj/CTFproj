@@ -47,3 +47,22 @@ body {
 .form-signin .alert {
 	display: block;
 }
+
+#task-window #incorrect-key {
+	margin-top: 15px;
+	margin-bottom: 0;
+}
+#task-window #correct-key {
+	margin-top:0;
+	margin-bottom: 0;
+}
+
+#task-nav button.is-checked {
+	background-color: rgb(190, 190, 190);
+	color: #fff;
+	border-color: rgb(190, 190, 190);
+}
+
+#task-nav .btn:focus, #task-nav .btn:active {
+	outline: none !important;
+}
