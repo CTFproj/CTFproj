@@ -25,6 +25,6 @@
         </div>
     </div>
 </div>
-<script src="/isotope.pkgd.min.js"></script>
-<script src="/tasks.js"></script>
+<script src="/js/isotope.pkgd.min.js"></script>
+<script src="/js/tasks.js"></script>
 <#include "footer.ftl">
