@@ -202,6 +202,12 @@ aside.raznr a.btn {
 .navbar-nav {
 	margin: 0px -15px;
 }
+@media (min-width: 768px) {
+	.navbar-nav {
+		float: left;
+		margin: 0;
+	}
+}
 .navbar-text {
 	margin:10px 15px;
 }
@@ -224,17 +230,24 @@ aside.raznr a.btn {
 .navbar-brand {
 	padding: 5px;
 }
+.navbar-default .navbar-collapse, .navbar-default .navbar-form {
+	border-color: transparent;
+}
+.navbar-default .navbar-toggle .icon-bar {
+	background-color: #fff;
+	border-color: #fff;
+}
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
+	background: transparent;
+}
 .form-signin {
 	max-width: 330px;
 	padding: 15px;
 	margin: 0 auto;
 }
-.form-signin .form-signin-heading,
-.form-signin .checkbox {
+.form-signin .form-signin-heading {
+	margin-top: 0;
 	margin-bottom: 10px;
-}
-.form-signin .checkbox {
-	font-weight: normal;
 }
 .form-signin .form-control {
 	position: relative;
