@@ -66,6 +66,7 @@
         <h3>Готов приступить к заданиям?</h3>
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
+                <a href="/tasks" class="btn btn-outline-inverse btn-lg">Приступить!</a>
             </div>
         </div>
     </div>
