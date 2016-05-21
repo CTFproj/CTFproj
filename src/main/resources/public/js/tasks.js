@@ -2,26 +2,27 @@
         $.getJSON("/admin/task", function (data) {
             tasks = $.parseJSON(JSON.stringify(data));
             var categories = [];
-            $('.container-tasks').html("");
-            $('.container-tasks').append($("<div id='tasks-nav-cat' class='button-group' data-filter-group='category'><h3>Category</h3></div>"));
-            $('#tasks-nav-cat').append($("<button class='btn btn-default is-checked' data-filter=''>all cat</button>"));
+            $('#nav-tasks').html("");
+            $('#nav-tasks').append($("<h1>Категория</h1><ul id='tasks-nav-cat' class='nav nav-sidebar' data-filter-group='category'></ul>"));
+            $('#tasks-nav-cat').append($("<li class='active' data-filter=''>все</li>"));
             for (var i = tasks.length-1; i >= 0; i--) {
                 if ($.inArray(tasks[i]['category'], categories) == -1) {
                     var category = tasks[i]['category'];
                     categories.push(category);
                     var categoryid = category.replace(/ /g,"-");
-                    $('#tasks-nav-cat').append($("<button class='btn btn-default' data-filter='."+ categoryid + "'>"+ category +"</button>"));
+                    $('#tasks-nav-cat').append($("<li data-filter='."+ categoryid + "'>"+ category +"</li>"));
                 }
             };
-            $('.container-tasks').append($("<div id='tasks-nav-sol' class='button-group' data-filter-group='solution'><h3>Solved?</h3></div>"));
-            $('#tasks-nav-sol').append($("<button class='btn btn-default is-checked' data-filter=''>all tasks</button>"));
-            $('#tasks-nav-sol').append($("<button class='btn btn-success' data-filter='.btn-success'>solv</button>"));
-            $('#tasks-nav-sol').append($("<button class='btn btn-primary' data-filter='.btn-primary'>not solv</button>"));
-            $('.container-tasks').append($("<div class='tasks'></div>"));
+            $('#nav-tasks').append($("<h1>Состояние</h1><ul id='tasks-nav-sol' class='nav nav-sidebar' data-filter-group='solution'></ul>"));
+            $('#tasks-nav-sol').append($("<li class='active' data-filter=''>все</li>"));
+            $('#tasks-nav-sol').append($("<li data-filter='.success'>решенные</li>"));
+            $('#tasks-nav-sol').append($("<li data-filter='.primary'>нерешенные</li>"));
+
+            $('.container-tasks').html("");
             for (var i = 0; i <= tasks.length-1; i++) {
                 var taskinfo = tasks[i];
                 var taskcategoryid = taskinfo.category.replace(/\s/g,"-");
-                $('.tasks').append($("<div class='task-button "+ taskcategoryid + " " + taskinfo.id +" btn btn-lg' data-value='"+ taskinfo.id +"' data-toggle='modal' data-target='#task-window'>" + taskinfo.name +" - "  + taskinfo.score + "</div>"));
+                $('.container-tasks').append($("<div class='task-button "+ taskcategoryid + " " + taskinfo.id +"' data-value='"+ taskinfo.id +"' data-toggle='modal' data-target='#task-window'><h3>"  + taskinfo.score + "</h3><p>" + taskinfo.name +"</p></div>"));
                 checktask(taskinfo.id);
             };
             $('body').on('click', 'div.task-button', function () {
@@ -31,24 +32,24 @@
                 loadtaskbyname(window.location.hash.substring(1));
                 $("#task-window").modal("show");
             }
-            var $container = $('.tasks').isotope({
+            var $container = $('.container-tasks').isotope({
                 itemSelector: '.task-button',
                 layoutMode: 'fitRows'
             });
             var filters = {};
-            $('#task-nav').on( 'click', 'button', function() {
+            $('#nav-tasks').on( 'click', 'li', function() {
                 var $this = $(this);
-                var $buttonGroup = $this.parents('.button-group');
-                var filterGroup = $buttonGroup.attr('data-filter-group');
+                var $navGroup = $this.parents('.nav-sidebar');
+                var filterGroup = $navGroup.attr('data-filter-group');
                 filters[ filterGroup ] = $this.attr('data-filter');
                 var filterValue = concatValues( filters );
                 $container.isotope({ filter: filterValue });
             });
-            $('.button-group').each( function( i, buttonGroup ) {
-                var $buttonGroup = $( buttonGroup );
-                $buttonGroup.on( 'click', 'button', function() {
-                    $buttonGroup.find('.is-checked').removeClass('is-checked');
-                    $( this ).addClass('is-checked');
+            $('.nav-sidebar').each( function( i, navGroup ) {
+                var $navGroup = $( navGroup );
+                $navGroup.on( 'click', 'li', function() {
+                    $navGroup.find('.active').removeClass('active');
+                    $( this ).addClass('active');
                 });
             });
             function concatValues( obj ) {
@@ -78,7 +79,7 @@
             }
             else if (data == 1){ // Challenge Solved
                 $("#correct-key").slideDown();
-                $('.' + id + '').removeClass('btn-primary').addClass('btn-success');
+                $('.' + id + '').removeClass('primary').addClass('success');
                 $("#task-submit").remove();
                 $("#task-input").remove();
             }
@@ -152,10 +153,10 @@
             taskid: id
         }, function (data) {
             if (data == 0){
-                $('.' + id + '').removeClass('btn-success').addClass('btn-primary');
+                $('.' + id + '').removeClass('success').addClass('primary');
             }
             else if (data == 1){ // Challenge Solved
-                $('.' + id + '').removeClass('btn-primary').addClass('btn-success');
+                $('.' + id + '').removeClass('primary').addClass('success');
             }
         });
     }

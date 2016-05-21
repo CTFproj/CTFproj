@@ -199,12 +199,24 @@ aside.raznr a.btn {
 .navbar-fixed-top {
 	margin-bottom: 0;
 }
+.navbar-nav {
+	margin: 0px -15px;
+}
+.navbar-text {
+	margin:10px 15px;
+}
+@media (min-width: 768px) {
+	.navbar-text {
+		margin:12px 5px 5px 0;
+	}
+}
 .navbar-default {
 	background-color: #33404b;
 	border-color: #33404b;
 }
-.navbar-default .navbar-nav>li>a {
+.navbar-default .navbar-text, .navbar-default .navbar-nav>li>a {
 	color:#fff;
+	font-size: 18px;
 }
 .navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
 	color: #c8c6c6;
@@ -276,4 +288,107 @@ aside.raznr a.btn {
 
 #task-nav .btn:focus, #task-nav .btn:active {
 	outline: none !important;
+}
+
+.sidebar {
+	display: block;
+	background-color: #f5f5f5;
+}
+.sidebar h1 {
+	font-size:26px;
+	margin-top: 0;
+}
+@media (min-width: 768px) {
+	.sidebar {
+		position: fixed;
+		top: 51px;
+		bottom: 0;
+		left: 0;
+		z-index: 1000;
+		padding: 20px;
+		overflow-x: hidden;
+		overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+	}
+}
+
+/* Sidebar navigation */
+.nav-sidebar {
+	margin-right: -20px; /* 20px padding + 1px border */
+	margin-bottom: 20px;
+	margin-left: -20px;
+}
+.nav-sidebar > li {
+	position: relative;
+	display: block;
+	padding: 10px 20px;
+}
+.nav-sidebar>li:focus, .nav-sidebar>li:hover {
+	text-decoration: none;
+	background-color: #eee;
+	cursor: pointer;
+}
+.nav-sidebar > .active,
+.nav-sidebar > .active:hover,
+.nav-sidebar > .active:focus {
+	color: #fff;
+	background-color: #7E8AA2 !important;
+}
+
+/*
+ * Main content
+ */
+
+.main {
+	padding: 20px;
+}
+@media (min-width: 768px) {
+	.main {
+		padding-right: 40px;
+		padding-left: 40px;
+	}
+}
+.main .page-header {
+	margin-top: 0;
+}
+
+.task-button {
+	text-align: center;
+	padding: 15px 35px;
+	background: #ffffff;
+	color:#000;
+	margin: 10px;
+	border-top: 1px solid #eaeaea;
+	border-left: 1px solid #eaeaea;
+	border-right: 1px solid #eaeaea;
+	border-bottom: 4px solid #eaeaea;
+	-webkit-transition: all ease 0.55s;
+	transition: all ease 0.55s;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+.task-button p {
+	font-size:16px;
+}
+.task-button:hover, .task-button:focus {
+	cursor: pointer;
+	border-bottom-color: #008ed6;
+}
+.task-button h3{
+	color: #008ed6;
+	font-size: 24px;
+	line-height: 28px;
+}
+
+.task-button.success {
+	color: #fff;
+	background-color: #5cb85c;
+	border-color: #4cae4c;
+}
+.task-button.success h3{
+	color:#fff;
+}
+.task-button.success:hover, .task-button.success:focus {
+	background-color: #449d44;
+	border-color: #398439;
 }
