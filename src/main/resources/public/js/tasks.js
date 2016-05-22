@@ -100,6 +100,7 @@
         obj = $.grep(tasks, function (e) {
             return e.id == id;
         })[0];
+        if(typeof obj != 'undefined') {
             updateTaskWindow(obj);
         }
     }
@@ -107,6 +108,7 @@
         obj = $.grep(tasks, function (e) {
             return e.name == taskname;
         })[0];
+        if(typeof obj != 'undefined') {
             updateTaskWindow(obj);
             $("#task-window").modal("show");
         }
