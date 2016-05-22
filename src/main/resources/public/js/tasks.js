@@ -30,7 +30,6 @@
             });
             if (window.location.hash.length > 0){
                 loadtaskbyname(window.location.hash.substring(1));
-                $("#task-window").modal("show");
             }
             var $container = $('.container-tasks').isotope({
                 itemSelector: '.task-button',
@@ -101,13 +100,16 @@
         obj = $.grep(tasks, function (e) {
             return e.id == id;
         })[0];
-        updateTaskWindow(obj);
+            updateTaskWindow(obj);
+        }
     }
     function loadtaskbyname(taskname) {
         obj = $.grep(tasks, function (e) {
             return e.name == taskname;
         })[0];
-        updateTaskWindow(obj);
+            updateTaskWindow(obj);
+            $("#task-window").modal("show");
+        }
     }
     function updateTaskWindow(obj) {
         window.location.hash = obj.name;
