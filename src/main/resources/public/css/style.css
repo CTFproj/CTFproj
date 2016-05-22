@@ -366,7 +366,7 @@ aside.raznr a.btn {
 
 .task-button {
 	text-align: center;
-	padding: 15px 35px;
+	padding: 10px 20px;
 	background: #ffffff;
 	color:#000;
 	margin: 10px;
@@ -374,11 +374,11 @@ aside.raznr a.btn {
 	border-left: 1px solid #eaeaea;
 	border-right: 1px solid #eaeaea;
 	border-bottom: 4px solid #eaeaea;
-	-webkit-transition: all ease 0.55s;
-	transition: all ease 0.55s;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
+	width: 100px;
+	height: 100px;
 }
 .task-button p {
 	font-size:16px;
@@ -386,11 +386,14 @@ aside.raznr a.btn {
 .task-button:hover, .task-button:focus {
 	cursor: pointer;
 	border-bottom-color: #008ed6;
+	-webkit-transition: all ease 0.55s;
+	transition: all ease 0.55s;
 }
 .task-button h3{
 	color: #008ed6;
 	font-size: 24px;
 	line-height: 28px;
+	margin-top:10px;
 }
 
 .task-button.success {
