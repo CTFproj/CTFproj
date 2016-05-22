@@ -11,11 +11,13 @@
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title" id="task-windowLabel"></h4>
+                            <div class="modal-info">
+                                <div><i class="fa fa-trophy" aria-hidden="true"></i><span class="score"></span></div>
+                                <div><i class="fa fa-bookmark" aria-hidden="true"></i><span class="cat"></span></div>
+                            </div>
                         </div>
                         <div class="modal-body">
-                            <p>score - <span class="score"></span></p>
-                            <p>cat - <span class="cat"></span> </p>
-                            <p>desc - <span class="desc"></span></p>
+                            <p><span class="desc"></span></p>
                             <div class="input-group"></div>
                             <div id="incorrect-key" class="alert alert-danger alert-dismissable" role="alert">
                                 <strong>Неверный флаг</strong>

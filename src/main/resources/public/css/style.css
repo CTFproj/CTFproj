@@ -283,14 +283,17 @@ aside.raznr a.btn {
 .form-signin .alert {
 	display: block;
 }
-
-#task-window #incorrect-key {
-	margin-top: 15px;
-	margin-bottom: 0;
+.modal-body {
+	padding-bottom: 0;
 }
-#task-window #correct-key {
-	margin-top:0;
-	margin-bottom: 0;
+#task-window .input-group {margin-bottom: 15px;}
+#task-window #incorrect-key, #task-window #correct-key {
+	margin: -15px;
+	border-radius: 0 0 6px 6px;
+	-webkit-border-radius: 0 0 6px 6px;
+}
+#task-window #incorrect-key {
+	margin-top:15px;
 }
 
 #task-nav button.is-checked {
@@ -385,7 +388,7 @@ aside.raznr a.btn {
 }
 .task-button:hover, .task-button:focus {
 	cursor: pointer;
-	border-bottom-color: #008ed6;
+	border-color: #008ed6;
 	-webkit-transition: all ease 0.55s;
 	transition: all ease 0.55s;
 }
@@ -407,4 +410,22 @@ aside.raznr a.btn {
 .task-button.success:hover, .task-button.success:focus {
 	background-color: #449d44;
 	border-color: #398439;
+}
+.modal-header {
+	padding-bottom: 5px;
+}
+.modal-info div{
+	float: left;
+}
+.modal-info div:not(:first-child){
+	margin-left: 6px;
+}
+.modal-info span{
+	margin-left: 2px;
+}
+.fa-trophy {
+	color: #F9E020;
+}
+.fa-bookmark {
+	color: #F11717;
 }

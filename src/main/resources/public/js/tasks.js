@@ -94,13 +94,9 @@
     $('#task-window').on('click', '#task-submit', function () {
         tasksubmit($('#task-id').val(), $('#task-input').val());
     });
-    function update(){
-        gettasks()
-    }
     $(function() {
         gettasks();
     });
-    setInterval(update, 300000);
     function loadtask(id) {
         obj = $.grep(tasks, function (e) {
             return e.id == id;
@@ -139,7 +135,7 @@
                 $('.input-group').html("");
                 $('.input-group').append($("<input id='task-id' type='hidden' value='"+ obj.id +"'>"));
                 $('.input-group').append($("<input id='task-input' type='text' class='form-control' placeholder='flag{!s_HeRe}'>"));
-                $('.input-group').append($("<div class='input-group-btn'><button id='task-submit' type='submit' class='btn btn-default' name='submit'>Submit</button></div>"));
+                $('.input-group').append($("<div class='input-group-btn'><button id='task-submit' type='submit' class='btn btn-default' name='submit'>Отправить</button></div>"));
             }
             else if (data == 1){ // Challenge Solved
                 $('#correct-key').show();
