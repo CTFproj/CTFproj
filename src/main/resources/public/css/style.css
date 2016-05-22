@@ -380,8 +380,10 @@ aside.raznr a.btn {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
-	width: 100px;
+	min-width: 100px;
 	height: 100px;
+	-webkit-transition: background-color ease 0.55s, border-color ease 0.55s;
+	transition: background-color ease 0.55s, border-color ease 0.55s;
 }
 .task-button p {
 	font-size:16px;
@@ -389,8 +391,6 @@ aside.raznr a.btn {
 .task-button:hover, .task-button:focus {
 	cursor: pointer;
 	border-color: #008ed6;
-	-webkit-transition: all ease 0.55s;
-	transition: all ease 0.55s;
 }
 .task-button h3{
 	color: #008ed6;
