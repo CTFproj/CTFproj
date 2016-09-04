@@ -47,6 +47,7 @@ public class Task {
     public String getFlag() {
         return flag;
     }
+
     public String getNameWOS() {
         return name.replace(" ", "");
     }

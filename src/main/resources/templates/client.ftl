@@ -3,8 +3,8 @@
     <div class="panel panel-primary">
         <div class="panel-heading">Profile</div>
         <div class="panel-body">
-            <#if id??><p>Team id: <br>
-            Team name: ${name!}<br>
+            <#if id??><p>Team id: ${id} <br>
+            Team name: ${name}<br>
             Team score: ${score}<br>
             Team place: ${place}</p>
             <#if task??>

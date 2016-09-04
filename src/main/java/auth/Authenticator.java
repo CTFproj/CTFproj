@@ -13,10 +13,10 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class Authenticator implements UsernamePasswordAuthenticator {
+class Authenticator implements UsernamePasswordAuthenticator {
 
     protected static final Logger logger = LoggerFactory.getLogger(Authenticator.class);
-    DataBaseHelp DB = new DataBaseHelp();
+    private DataBaseHelp DB = new DataBaseHelp();
 
     public void validate(UsernamePasswordCredentials credentials) {
         if (credentials == null) {
@@ -25,7 +25,10 @@ public class Authenticator implements UsernamePasswordAuthenticator {
        LoginInfo li = new LoginInfo();
         String username = credentials.getUsername();
         String password = DigestUtils.md5Hex(credentials.getPassword());
-            List<Team> list = DB.sql2o.open().createQuery("SELECT * FROM team WHERE name = :username").addParameter("username",username).executeAndFetch(Team.class);
+            List<Team> list = DB.sql2o.open()
+                    .createQuery("SELECT * FROM team WHERE name = :username")
+                    .addParameter("username",username)
+                    .executeAndFetch(Team.class);
             if(list.size() == 0) {
                 li.setError("Enter a valid login");
                 this.throwsException("Username cannot be blank");
@@ -52,7 +55,7 @@ public class Authenticator implements UsernamePasswordAuthenticator {
 
     }
 
-    protected void throwsException(String message) {
+    private void throwsException(String message) {
         throw new CredentialsException(message);
     }
 }
