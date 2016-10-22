@@ -22,7 +22,7 @@ class Authenticator implements UsernamePasswordAuthenticator {
         if (credentials == null) {
             this.throwsException("No credential");
         }
-       LoginInfo li = new LoginInfo();
+        LoginInfo li = new LoginInfo();
         String username = credentials.getUsername();
         String password = DigestUtils.md5Hex(credentials.getPassword());
             List<Team> list = DB.sql2o.open()

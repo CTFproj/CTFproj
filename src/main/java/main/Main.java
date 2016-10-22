@@ -209,6 +209,7 @@ public class Main {
         map.put("callbackUrl", formClient.getCallbackUrl());
         map.put("title", "Login");
         map.put("error", error);
+        loginInfo.setError(null);
         return new ModelAndView(map, "templates/login.ftl");
     }
     //get profile of auth user
