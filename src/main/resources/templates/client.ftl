@@ -1,19 +1,19 @@
 <#include "header.ftl">
 <div class="container">
     <div class="panel panel-primary">
-        <div class="panel-heading">Profile</div>
+        <div class="panel-heading">Профиль</div>
         <div class="panel-body">
-            <#if id??><p>Team id: ${id} <br>
-            Team name: ${name}<br>
-            Team score: ${score}<br>
-            Team place: ${place}</p>
+            <#if id??><p>
+            Название команды: ${name}<br>
+            Очки команды: ${score}<br>
+            Место: ${place}</p>
             <#if task??>
                 <h2>Solved tasks</h2>
                 <table class="table table-striped">
                     <tr>
-                        <th>Task</th>
-                        <th>Score</th>
-                        <th>Category</th>
+                        <th>Задание</th>
+                        <th>Очки</th>
+                        <th>Категория</th>
                     </tr>
                     <#list task as solve>
                         <tr>

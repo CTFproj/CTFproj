@@ -1,12 +1,12 @@
 <#include "header.ftl">
 <div class="container">
     <div class="panel panel-default">
-        <div class="panel-heading">Rating</div>
+        <div class="panel-heading">Рейтинг команд</div>
         <table class="table">
             <tr>
                 <th>#</th>
-                <th>Name</th>
-                <th>Score</th>
+                <th>Название</th>
+                <th>Очки</th>
             </tr>
         <#list list as team>
             <tr>

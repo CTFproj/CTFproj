@@ -20,9 +20,9 @@ public class AuthConfigFactory implements ConfigFactory {
     public Config build() {
         // HTTP
         Authenticator auth = new Authenticator();
-        final FormClient formClient = new FormClient("http://localhost:8080/login", auth);
+        final FormClient formClient = new FormClient("/login", auth);
         final IndirectBasicAuthClient indirectBasicAuthClient = new IndirectBasicAuthClient(new SimpleTestUsernamePasswordAuthenticator());
-        final Clients clients = new Clients("http://localhost:8080/callback", formClient, indirectBasicAuthClient);
+        final Clients clients = new Clients("/callback", formClient, indirectBasicAuthClient);
         final Config config = new Config(clients);
         config.setHttpActionAdapter(new AuthHttpActionAdapter(freeMarkerEngine));
         return config;

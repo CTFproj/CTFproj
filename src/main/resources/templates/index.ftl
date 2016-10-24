@@ -1,7 +1,7 @@
 <#include "header.ftl">
 <header style="background-image: url('/img/bg-header.jpg');">
     <div class="intro-content">
-        <div class="brand">CTFProj - проект для первокурсников</div>
+        <div class="brand">CTFProj - окунись в информационную безопасность</div>
     </div>
     <div class="scroll-down">
         <a class="btn page-scroll" href="#about"><i class="fa fa-angle-double-down fa-fw"></i></a>
@@ -14,8 +14,11 @@
                 <img src="/img/bg-about.jpg" class="img-responsive" alt="">
             </div>
             <div class="col-md-6 text-center">
-                <h1>Привет, первокурсник! (:</h1>
-                <h4>Ты работаешь в фирме инженером по информационной безопасности, фирму не обошли стороной злоумышленники, тебе необходимо собрать информацию о хакерах, выполняя задания (таски).
+                <h1>Привет, первокурсник!</h1>
+                <h4>
+                    Ты работаешь в фирме инженером по информационной безопасности, твоя контора подверглась взлому
+                    злоумышленников, поэтому теперь тебе необходимо вычислить и поймать хакеров. Благо они любят
+                    оставлять зацепки.
                 </h4>
             </div>
         </div>
@@ -59,6 +62,7 @@
                 </div>
             </div>
         </div>
+        <p>В случае вопросов</p>
     </div>
 </section>
 <section class="kza bg-dark">
@@ -75,7 +79,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-10 col-md-offset-1 wow fadeIn">
-                    <span class="quote">Не знаешь с чего начать?<br> Начни с <span class="text-primary">курса молодого бойца</span>!</span>
+                <span class="quote">Не знаешь с чего начать?<br> Начни с <span
+                        class="text-primary">курса молодого бойца</span>!</span>
                 <a class="btn btn-outline-inverse btn-lg" href="http://kmb.ufoctf.ru/">Начать</a>
             </div>
         </div>
@@ -87,21 +92,21 @@
 <script src="/js/background.js"></script>
 <script src="/js/wow.min.js"></script>
 <script>
-    (function($) {
+    (function ($) {
         "use strict";
-        $('a.page-scroll').bind('click', function(event) {
+        $('a.page-scroll').bind('click', function (event) {
             var $anchor = $(this);
             $('html, body').stop().animate({
                 scrollTop: ($($anchor.attr('href')).offset().top - 50)
             }, 1250, 'easeInOutExpo');
             event.preventDefault();
         });
-        $('.navbar-collapse ul li a').click(function() {
+        $('.navbar-collapse ul li a').click(function () {
             $('.navbar-toggle:visible').click();
         });
     })(jQuery);
     var isPhoneDevice = "ontouchstart" in document.documentElement;
-    $(document).ready(function() {
+    $(document).ready(function () {
         if (isPhoneDevice) {
             //mobile
         } else {

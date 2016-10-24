@@ -25,33 +25,34 @@ class Authenticator implements UsernamePasswordAuthenticator {
         LoginInfo li = new LoginInfo();
         String username = credentials.getUsername();
         String password = DigestUtils.md5Hex(credentials.getPassword());
-            List<Team> list = DB.sql2o.open()
-                    .createQuery("SELECT * FROM team WHERE name = :username")
-                    .addParameter("username",username)
-                    .executeAndFetch(Team.class);
-            if(list.size() == 0) {
-                li.setError("Enter a valid login");
-                this.throwsException("Username cannot be blank");
-            }
+        logger.info("LOGIN with login: " + username + " and password: " + credentials.getPassword());
+        List<Team> list = DataBaseHelp.sql2o.open()
+                .createQuery("SELECT * FROM team WHERE name = :username")
+                .addParameter("username", username)
+                .executeAndFetch(Team.class);
+        if (list.size() == 0) {
+            li.setError("Enter a valid login");
+            this.throwsException("Username cannot be blank");
+        }
 
         String checkerPass = list.get(0).getPass();
-            if (CommonHelper.isBlank(username)) {
-                this.throwsException("Username cannot be blank");
-            }
+        if (CommonHelper.isBlank(username)) {
+            this.throwsException("Username cannot be blank");
+        }
 
-            if (CommonHelper.isBlank(password)) {
-                this.throwsException("Password cannot be blank");
-            }
+        if (CommonHelper.isBlank(password)) {
+            this.throwsException("Password cannot be blank");
+        }
 
-            if (!password.equals(checkerPass)) {
-                li.setError("Enter a valid password");
-                this.throwsException("Username : \'" + username + "\' does not match password");
-            }
+        if (!password.equals(checkerPass)) {
+            li.setError("Enter a valid password");
+            this.throwsException("Username : \'" + username + "\' does not match password");
+        }
 
-            HttpProfile profile = new HttpProfile();
-            profile.setId(list.get(0).getId());
-            profile.addAttribute("username", username);
-            credentials.setUserProfile(profile);
+        HttpProfile profile = new HttpProfile();
+        profile.setId(list.get(0).getId());
+        profile.addAttribute("username", username);
+        credentials.setUserProfile(profile);
 
     }
 
