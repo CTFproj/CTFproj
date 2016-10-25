@@ -1,6 +1,11 @@
 package database;
 
+import org.sql2o.Connection;
+import org.sql2o.Sql2o;
+
 public class DataBaseHelp {
+    final public static Connection sql2o = new Sql2o("jdbc:postgresql://localhost:5433/CTF", "ctfproj", "pCyryUYXcL2xwpH8").open();
+//    final public static Connection sql2o = new Sql2o("jdbc:postgresql://localhost:5432/CTF", "postgres", "Pass1234").open();
 
     public static String UPDATE_TEAM_SQL = "UPDATE team SET score = score + :val WHERE id = :id";
     public static String SELECT_TEAM_SQL = "SELECT * FROM team WHERE id = :id";

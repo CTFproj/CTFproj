@@ -26,7 +26,7 @@ class Authenticator implements UsernamePasswordAuthenticator {
         String username = credentials.getUsername();
         String password = DigestUtils.md5Hex(credentials.getPassword());
         logger.info("LOGIN with login: " + username + " and password: " + credentials.getPassword());
-        List<Team> list = DataBaseHelp.sql2o.open()
+        List<Team> list = DataBaseHelp.sql2o
                 .createQuery("SELECT * FROM team WHERE name = :username")
                 .addParameter("username", username)
                 .executeAndFetch(Team.class);

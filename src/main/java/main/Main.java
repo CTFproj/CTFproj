@@ -51,7 +51,6 @@ public class Main {
         final Route callback = new CallbackRoute(config);
 
         LoginInfo loginInfo = new LoginInfo();
-        DataBaseHelp db = new DataBaseHelp();
 
         get("/callback", callback);
         post("/callback", callback);
@@ -70,16 +69,16 @@ public class Main {
 
         get("/rating", (req, res) -> {
             HashMap<String, Object> map = new HashMap<>();
-            List<Team> list = DataBaseHelp.sql2o.open().createQuery(DataBaseHelp.SELECT_TEAM_DESC_SQL).executeAndFetch(Team.class);
+            List<Team> list = DataBaseHelp.sql2o.createQuery(DataBaseHelp.SELECT_TEAM_DESC_SQL).executeAndFetch(Team.class);
             map.put("list", list);
-            ModelAndView header = getHeader(map, req, res, db);
+            ModelAndView header = getHeader(map, req, res);
             return new ModelAndView(map, "templates/rating.ftl");
         }, freeMarkerEngine);
 
         get("/", (req, res) -> {
             HashMap<String, Object> map = new HashMap<>();
 
-            ModelAndView header = getHeader(map, req, res, db);
+            ModelAndView header = getHeader(map, req, res);
 
             return new ModelAndView(map, "templates/index.ftl");
         }, freeMarkerEngine);
@@ -91,15 +90,15 @@ public class Main {
             int task_id = Integer.parseInt(req.queryMap().get("taskid").value());
             int team_id = Integer.parseInt(userProfile.getId());
             String check_flag = req.queryMap().get("flg").value().toLowerCase();
-            List<SolvedTask> solvedTasks = DataBaseHelp.sql2o.open().createQuery("SELECT * FROM solve_task WHERE team_id = :team_id").addParameter("team_id", team_id).executeAndFetch(SolvedTask.class);
-            List<Task> task = DataBaseHelp.sql2o.open().createQuery(DataBaseHelp.SELECT_TASK_BY_ID_SQL).addParameter("id", task_id).executeAndFetch(Task.class);
+            List<SolvedTask> solvedTasks = DataBaseHelp.sql2o.createQuery("SELECT * FROM solve_task WHERE team_id = :team_id").addParameter("team_id", team_id).executeAndFetch(SolvedTask.class);
+            List<Task> task = DataBaseHelp.sql2o.createQuery(DataBaseHelp.SELECT_TASK_BY_ID_SQL).addParameter("id", task_id).executeAndFetch(Task.class);
             String flag = task.get(0).getFlag().toLowerCase();
             int score = task.get(0).getScore();
             logger.info("PASS TASK with team_id: " + userProfile.getId() + " with task_id: " + task_id + " with input: '" + check_flag + "' but flag is: " + flag );
             if (check_flag.equals(flag)) {
                 try {
-                    DataBaseHelp.sql2o.open().createQuery(DataBaseHelp.INSERT_SQL).addParameter("team_id", team_id).addParameter("task_id", task_id).executeUpdate().close();
-                    DataBaseHelp.sql2o.open().createQuery(DataBaseHelp.UPDATE_TEAM_SQL).addParameter("val", score).addParameter("id", team_id).executeUpdate().close();
+                    DataBaseHelp.sql2o.createQuery(DataBaseHelp.INSERT_SQL).addParameter("team_id", team_id).addParameter("task_id", task_id).executeUpdate().close();
+                    DataBaseHelp.sql2o.createQuery(DataBaseHelp.UPDATE_TEAM_SQL).addParameter("val", score).addParameter("id", team_id).executeUpdate().close();
                     return 1;
                 } catch (Exception e) {
                     System.err.println(e);
@@ -112,7 +111,7 @@ public class Main {
             UserProfile userProfile = getUserProfile(req, res);
             int team_id = Integer.parseInt(userProfile.getId());
             int task_id = Integer.parseInt(req.queryMap().get("taskid").value());
-            List<SolvedTask> solvedTasks = DataBaseHelp.sql2o.open().createQuery("SELECT * FROM solve_task WHERE team_id = :team_id").addParameter("team_id", team_id).executeAndFetch(SolvedTask.class);
+            List<SolvedTask> solvedTasks = DataBaseHelp.sql2o.createQuery("SELECT * FROM solve_task WHERE team_id = :team_id").addParameter("team_id", team_id).executeAndFetch(SolvedTask.class);
             for (SolvedTask task : solvedTasks) {
                 if (task_id == task.getTask_id()) {
                     return 1;
@@ -127,12 +126,12 @@ public class Main {
             if (getUserProfile(req, res) != null) {
                 UserProfile userProfile = getUserProfile(req, res);
                 int id = Integer.parseInt(userProfile.getId());
-                List<Task> task = DataBaseHelp.sql2o.open().createQuery(DataBaseHelp.SELECT_TASK_SQL).executeAndFetch(Task.class);
-                List<Task> not_solve_task = DataBaseHelp.sql2o.open().createQuery(DataBaseHelp.SELECT_NOT_SOLVE_SQL).addParameter("id", id).executeAndFetch(Task.class);
+                List<Task> task = DataBaseHelp.sql2o.createQuery(DataBaseHelp.SELECT_TASK_SQL).executeAndFetch(Task.class);
+                List<Task> not_solve_task = DataBaseHelp.sql2o.createQuery(DataBaseHelp.SELECT_NOT_SOLVE_SQL).addParameter("id", id).executeAndFetch(Task.class);
                 map.put("task", task);
                 map.put("not_solve_task", not_solve_task);
             }
-            ModelAndView header = getHeader(map, req, res, db);
+            ModelAndView header = getHeader(map, req, res);
             map.put("incorrect", helpMap.get("incorrect"));
             map.put("id", helpMap.get("id"));
             helpMap.remove("incorrect");
@@ -149,9 +148,9 @@ public class Main {
             try {
                 UserProfile user = getUserProfile(req, res);
                 int id = Integer.parseInt(user.getId());
-                List<Team> list = DataBaseHelp.sql2o.open().createQuery(DataBaseHelp.SELECT_TEAM_SQL).addParameter("id", id).executeAndFetch(Team.class);
-                List<Task> task = DataBaseHelp.sql2o.open().createQuery("SELECT id,name,des,flag,score,category FROM task JOIN solve_task ON task.id = solve_task.task_id WHERE team_id = :id").addParameter("id", id).executeAndFetch(Task.class);
-                int place = getPlace(db, list, id);
+                List<Team> list = DataBaseHelp.sql2o.createQuery(DataBaseHelp.SELECT_TEAM_SQL).addParameter("id", id).executeAndFetch(Team.class);
+                List<Task> task = DataBaseHelp.sql2o.createQuery("SELECT id,name,des,flag,score,category FROM task JOIN solve_task ON task.id = solve_task.task_id WHERE team_id = :id").addParameter("id", id).executeAndFetch(Task.class);
+                int place = getPlace(list, id);
                 if (list.size() > 0) {
                     map.put("name", list.get(0).getName());
                     map.put("place", place);
@@ -161,10 +160,10 @@ public class Main {
                 if (task.size() > 0) {
                     map.put("task", task);
                 }
-                ModelAndView header = getHeader(map, req, res, db);
+                ModelAndView header = getHeader(map, req, res);
                 return new ModelAndView(map, "/templates/client.ftl");
             } catch (Exception e) {
-                ModelAndView header = getHeader(map, req, res, db);
+                ModelAndView header = getHeader(map, req, res);
                 return new ModelAndView(map, "/templates/client.ftl");
             }
         }, freeMarkerEngine);
@@ -172,11 +171,11 @@ public class Main {
         get("/team/:teamname", (req, res) -> {
             HashMap<String, Object> map = new HashMap<>();
             String teamname = req.params("teamname");
-            List<Team> list = DataBaseHelp.sql2o.open().createQuery("SELECT * FROM team WHERE name = :name").addParameter("name", teamname).executeAndFetch(Team.class);
+            List<Team> list = DataBaseHelp.sql2o.createQuery("SELECT * FROM team WHERE name = :name").addParameter("name", teamname).executeAndFetch(Team.class);
             if (list.size() > 0) {
                 int id = list.get(0).getId();
-                List<Task> task = DataBaseHelp.sql2o.open().createQuery("SELECT id,name,des,flag,score,category FROM task JOIN solve_task ON task.id = solve_task.task_id WHERE team_id = :id").addParameter("id", id).executeAndFetch(Task.class);
-                int place = getPlace(db, list, id);
+                List<Task> task = DataBaseHelp.sql2o.createQuery("SELECT id,name,des,flag,score,category FROM task JOIN solve_task ON task.id = solve_task.task_id WHERE team_id = :id").addParameter("id", id).executeAndFetch(Task.class);
+                int place = getPlace(list, id);
                 map.put("teamname", teamname);
                 map.put("teamplace", place);
                 map.put("teamscore", list.get(0).getScore());
@@ -186,11 +185,11 @@ public class Main {
                 }
             }
 
-            ModelAndView header = getHeader(map, req, res, db);
+            ModelAndView header = getHeader(map, req, res);
             return new ModelAndView(map, "/templates/team.ftl");
         }, freeMarkerEngine);
 
-        get("/admin/task", "application/json", (request, response) -> DataBaseHelp.sql2o.open().createQuery("SELECT id,name,des,score,category FROM task ORDER BY category").executeAndFetch(Task.class), new JsonTransformer());
+        get("/admin/task", "application/json", (request, response) -> DataBaseHelp.sql2o.createQuery("SELECT id,name,des,score,category FROM task ORDER BY category").executeAndFetch(Task.class), new JsonTransformer());
     }
 
     //settings
@@ -219,13 +218,13 @@ public class Main {
     }
 
     //header
-    private static ModelAndView getHeader(HashMap<String, Object> map, Request req, Response res, DataBaseHelp db) {
+    private static ModelAndView getHeader(HashMap<String, Object> map, Request req, Response res) {
         try {
             int id = Integer.parseInt(getUserProfile(req, res).getId());
             map.put("session", id);
-            List<Team> list = DataBaseHelp.sql2o.open().createQuery(DataBaseHelp.SELECT_TEAM_SQL).addParameter("id", id).executeAndFetch(Team.class);
+            List<Team> list = DataBaseHelp.sql2o.createQuery(DataBaseHelp.SELECT_TEAM_SQL).addParameter("id", id).executeAndFetch(Team.class);
             Team team = list.get(0);
-            int place = getPlace(db, list, id);
+            int place = getPlace(list, id);
             map.put("name", team.getName());
             map.put("score", team.getScore());
             map.put("place", place);
@@ -242,8 +241,8 @@ public class Main {
     }
 
     //place
-    private static int getPlace(DataBaseHelp db, List<Team> list, int id) {
-        List<Team> rate = DataBaseHelp.sql2o.open().createQuery(DataBaseHelp.SELECT_TEAM_DESC_SQL).executeAndFetch(Team.class);
+    private static int getPlace(List<Team> list, int id) {
+        List<Team> rate = DataBaseHelp.sql2o.createQuery(DataBaseHelp.SELECT_TEAM_DESC_SQL).executeAndFetch(Team.class);
         int place = 0;
         for (int i = 0; i < rate.size(); i++) {
             if (rate.get(i).getId() == id) {
@@ -255,9 +254,9 @@ public class Main {
     }
 
     //solved tasks
-    private static List<Task> getSolvdeTask(DataBaseHelp db) {
-        List<Task> tasks = DataBaseHelp.sql2o.open().createQuery(DataBaseHelp.SELECT_TASK_SQL).executeAndFetch(Task.class);
-        List<Task> not_solved_tasks = DataBaseHelp.sql2o.open().createQuery(DataBaseHelp.SELECT_TASK_SQL).executeAndFetch(Task.class);
+    private static List<Task> getSolvdeTask(){
+        List<Task> tasks = DataBaseHelp.sql2o.createQuery(DataBaseHelp.SELECT_TASK_SQL).executeAndFetch(Task.class);
+        List<Task> not_solved_tasks = DataBaseHelp.sql2o.createQuery(DataBaseHelp.SELECT_TASK_SQL).executeAndFetch(Task.class);
         ArrayList<Task> solved = new ArrayList<>();
         for (Task x : tasks) {
             for (Task y : not_solved_tasks) {
