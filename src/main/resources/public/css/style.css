@@ -290,16 +290,16 @@ aside.raznr a.btn {
 .modal-body {
 	padding-bottom: 0;
 }
-.modal-body p.desc {
+.modal-body div.desc {
 	margin: 0 0 15px;
 }
-.modal-body p.desc div.hint {
+.modal-body div.desc div.hint {
 	color: #31708f;
 	background-color: #d9edf7;
 	border: 1px solid #bce8f1;
 	border-radius: 4px;
 	padding: 10px;
-	margin-top:10px;
+	margin-top:15px;
 }
 #task-window .input-group {margin-bottom: 15px;}
 #task-window #incorrect-key, #task-window #correct-key {

@@ -17,7 +17,7 @@
                             </div>
                         </div>
                         <div class="modal-body">
-                            <p class="desc"></p>
+                            <div class="desc"></div>
                             <div class="input-group"></div>
                             <div id="incorrect-key" class="alert alert-danger alert-dismissable" role="alert">
                                 <strong>Неверный флаг</strong>
