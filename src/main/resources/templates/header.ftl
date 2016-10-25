@@ -34,10 +34,10 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
             <#if session??>
-                <li><a href="/client">Профиль</a>
-                <li class="navbar-text">Имя: ${name}</li>
+                <li class="navbar-text">Привет, ${name}.</li>
                 <li class="navbar-text">Очки: ${score}</li>
                 <li class="navbar-text">Место: ${place}</li>
+                <li><a href="/client">Профиль</a></li>
                 <li><a href="/logout" >Выйти</a></li>
             <#else> <li><a href="/login">Войти</a></li>
             </#if>

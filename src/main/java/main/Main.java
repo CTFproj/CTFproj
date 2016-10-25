@@ -204,7 +204,7 @@ public class Main {
         final FormClient formClient = clients.findClient(FormClient.class);
         String error = loginInfo.getError();
         map.put("callbackUrl", formClient.getCallbackUrl());
-        map.put("title", "Login");
+        map.put("title", "Авторизация");
         map.put("error", error);
         loginInfo.setError(null);
         return new ModelAndView(map, "templates/login.ftl");
@@ -231,8 +231,20 @@ public class Main {
         } catch (NullPointerException ignored) {
         }
         String path = req.pathInfo().substring(1);
+        if (path.equals("client")) {
+            path = "Профиль";
+        }
+        if (path.equals("rating")) {
+            path = "Рейтинг";
+        }
+        if (path.equals("tasks")) {
+            path = "Задания";
+        }
+        if (path.startsWith("team")){
+            path = "Команда - " + path.substring(5);
+        }
         if (path.equals("")) {
-            path = "Main";
+            path = "Главная";
         } else {
             path = path.substring(0, 1).toUpperCase() + path.substring(1).replace("/", " - ");
         }

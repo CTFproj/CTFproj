@@ -31,7 +31,7 @@ class Authenticator implements UsernamePasswordAuthenticator {
                 .addParameter("username", username)
                 .executeAndFetch(Team.class);
         if (list.size() == 0) {
-            li.setError("Enter a valid login");
+            li.setError("Введите правильный логин");
             this.throwsException("Username cannot be blank");
         }
 
@@ -45,7 +45,7 @@ class Authenticator implements UsernamePasswordAuthenticator {
         }
 
         if (!password.equals(checkerPass)) {
-            li.setError("Enter a valid password");
+            li.setError("Введите правильный пароль");
             this.throwsException("Username : \'" + username + "\' does not match password");
         }
 

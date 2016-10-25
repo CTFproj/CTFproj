@@ -8,7 +8,7 @@
             Очки команды: ${score}<br>
             Место: ${place}</p>
             <#if task??>
-                <h2>Solved tasks</h2>
+                <h2>Решенные задания</h2>
                 <table class="table table-striped">
                     <tr>
                         <th>Задание</th>
@@ -27,7 +27,7 @@
         </div>
         <div class="panel-footer">
             <form action="logout" method="POST">
-                <input id="btn_login" name="btn_login" type="submit" class="btn btn-danger" value="Logout"/>
+                <input id="btn_login" name="btn_login" type="submit" class="btn btn-danger" value="Выйти"/>
             </form>
         </div>
     </div>
