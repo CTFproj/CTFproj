@@ -1,17 +1,20 @@
 <#include "header.ftl">
-<div class="container">
-    <div class="panel panel-default">
-
+<div class="rating">
+    <div class="container">
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#rating" aria-controls="rating" role="tab"
-                                                      data-toggle="tab">Рейтинг 1 курса</a></li>
+                                                      data-toggle="tab">Рейтинг первокурсников</a></li>
             <li role="presentation"><a href="#total_rating" aria-controls="total_rating" role="tab" data-toggle="tab">
                 Общий рейтинг</a></li>
         </ul>
+    </div>
+</div>
+<div class="container">
+    <div class="panel panel-default">
 
         <!-- Tab panes -->
         <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="rating">
+            <div role="tabpanel" class="tab-pane fade in active" id="rating">
                 <table class="table">
                     <tr>
                         <th>#</th>
@@ -27,7 +30,7 @@
                 </#list>
                 </table>
             </div>
-            <div role="tabpanel" class="tab-pane" id="total_rating">
+            <div role="tabpanel" class="tab-pane fade" id="total_rating">
                 <table class="table">
                     <tr>
                         <th>#</th>
