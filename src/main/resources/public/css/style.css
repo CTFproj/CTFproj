@@ -44,6 +44,10 @@ section#about .about-img {
     section {
         padding: 75px 0;
     }
+    .rating .nav-tabs > li {
+        width: 100%;
+        text-align: center;
+    }
 }
 
 header {
@@ -289,6 +293,15 @@ aside.raznr a.btn {
     background: transparent;
 }
 
+.navbar-default .navbar-text > i {
+    margin-right: 4px;
+}
+
+.navbar-default .navbar-text > a {
+    display: inline-block;
+    padding: 0;
+}
+
 .form-signin {
     max-width: 330px;
     padding: 15px;
@@ -468,6 +481,7 @@ aside.raznr a.btn {
     height: 100px;
     -webkit-transition: background-color ease 0.55s, border-color ease 0.55s;
     transition: background-color ease 0.55s, border-color ease 0.55s;
+    cursor: pointer;
 }
 
 .task-button p {
@@ -517,12 +531,20 @@ aside.raznr a.btn {
     margin-left: 2px;
 }
 
+.fa-diamond {
+    color: #5ab8f3;
+}
+
 .fa-trophy {
     color: #F9E020;
 }
 
 .fa-bookmark {
     color: #F11717;
+}
+
+.rules-content .fa {
+    color: #333;
 }
 
 .panel, .panel-heading {

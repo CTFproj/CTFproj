@@ -12,7 +12,7 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title" id="task-windowLabel"></h4>
                             <div class="modal-info">
-                                <div><i class="fa fa-trophy" aria-hidden="true"></i><span class="score"></span></div>
+                                <div><i class="fa fa-diamond" aria-hidden="true"></i><span class="score"></span></div>
                                 <div><i class="fa fa-bookmark" aria-hidden="true"></i><span class="cat"></span></div>
                             </div>
                         </div>

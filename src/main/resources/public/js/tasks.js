@@ -19,7 +19,7 @@
             $('#tasks-nav-sol').append($("<li data-filter='.primary'>нерешенные</li>"));
 
             $('.container-tasks').html("");
-            for (var i = 0; i <= tasks.length-1; i++) {
+            for (var i = 0; i < tasks.length; i++) {
                 var taskinfo = tasks[i];
                 var taskcategoryid = taskinfo.category.replace(/\s/g,"-");
                 $('.container-tasks').append($("<div class='task-button "+ taskcategoryid + " " + taskinfo.id +"' data-value='"+ taskinfo.id +"' data-toggle='modal' data-target='#task-window'><h3>"  + taskinfo.score + "</h3><p>" + taskinfo.name +"</p></div>"));

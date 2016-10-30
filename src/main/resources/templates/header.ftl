@@ -34,10 +34,9 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
             <#if session??>
-                <li class="navbar-text">Привет, ${name}.</li>
-                <li class="navbar-text">Очки: ${score}</li>
-                <li class="navbar-text">Место: ${place}</li>
-                <li><a href="/client">Профиль</a></li>
+                <li class="navbar-text">Привет, <a href="/client">${name}</a>.</li>
+                <li class="navbar-text"><i class="fa fa-diamond" aria-hidden="true"></i>${score}</li>
+                <li class="navbar-text"><i class="fa fa-trophy" aria-hidden="true"></i>${place}</li>
                 <li><a href="/logout" >Выйти</a></li>
             <#else> <li><a href="/login">Войти</a></li>
             </#if>
